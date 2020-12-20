@@ -1,0 +1,47 @@
+.title{
+    /* float: left; */
+    color: rgba(0,0,0,.85);
+    font-weight: 500;
+    font-size: 20px;
+    font-family: Avenir,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+}
+
+.title_small{
+    color: rgba(0,0,0,.85);
+    font-weight: 500;
+    font-size: 18px;
+    font-family: Avenir,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+}
+
+.inputDatasetName{
+    font-size: 15px;
+    font-family: Avenir,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    margin-top: 10px;
+    width: 380px;
+    /* float: left; */
+}
+
+.dataType{
+    font-size: 15px;
+    font-family: Avenir,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    margin-top: 10px;
+    width: 380px;
+    /* float: left; */
+}
+
+.dataUrl{
+    font-size: 15px;
+    font-family: Avenir,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    margin-top: 10px;
+    width: 700px;
+}
+
+
+.description{
+    font-size: 15px;
+    font-family: Avenir,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    margin-top: 10px;
+    width: 700px;
+    /* float: left; */
+}
+
