@@ -11,10 +11,12 @@ class DatasetCreate extends Component {
     constructor(props, context){
         super(props, context);
         this.state = {
+            loading:false,
             datasetName:'',
             dataType:'',
             dataTrainUrl:'',   
-            description:''
+            description:'',
+            urlExample:'',
         };
     }
     
@@ -65,13 +67,16 @@ class DatasetCreate extends Component {
         fetch("/api/datasets/create_training_dataset/", requestOptions)
         .then(response => response.text())
         .then(result => this.checkCreate(result))
-        .catch(error => console.log('error', error));
+        .catch(error => {message.warning('create fail'); console.log(error)});
     }
 
     checkCreate = (result) => {
-        // console.log(result)
+        console.log(result)
         let status = JSON.parse(result).status;
         if (status === 'SUCCESS') {
+            this.setState({
+                loading:false,
+            })
             this.props.fetchDatasetInfo();
             this.props.history.push("/datasets/summary");
         } else {
@@ -82,19 +87,28 @@ class DatasetCreate extends Component {
     create = () => {
         // console.log(this.state.dataType,this.state.datasetName,
         //     this.state.description,this.state.dataTrainUrl)
-        if ( this.state.datasetName !== '' && 
-        this.state.description !== '' && this.state.dataTrainUrl !== '' ) 
+        if ( this.state.datasetName !== '' &&  this.state.dataTrainUrl !== '' ) 
         {
             this.fetchToCreate();
+            this.setState({
+                loading:true,
+            })
         }else{
             message.warning('Invalid creation')
         }
     };
+
+    urlExample = () => {
+        this.setState({
+            urlExample:'asdfasdfafd'
+        })
+    }
+
     render() {
         // console.log(this.context)
         let datasetName = (
             <div id = 'datasetName'>
-                <label className={Style.title}>Dataset Name :</label>
+                <label className={Style.title}>Dataset Name<span style={{color:'red'}}>*</span> :</label>
                 <br></br>
                 <Input placeholder="input your dataset's name" 
                     allowClear 
@@ -104,7 +118,7 @@ class DatasetCreate extends Component {
         )
         let dataType = (
             <div id = 'dataType' style={{paddingTop:'30px'}}>
-                <label className={Style.title}>Data Type :</label>
+                <label className={Style.title}>Data Type <span style={{color:'red'}}>*</span>:</label>
                 <br></br>
                 <Select
                     className={Style.dataType}
@@ -123,9 +137,13 @@ class DatasetCreate extends Component {
         );
         let dataUrl = (
             <div id = 'dataUrl' style={{paddingTop:'30px'}}>
-                <label className={Style.title}>Link to training and validation dataset :</label>
+                <label className={Style.title}>
+                    Link to training and validation dataset<span style={{color:'red'}}>*</span> : 
+                    <a className={Style.a_example} onClick={this.urlExample} >Example</a>
+                </label>
                 <br></br>
-                <Input placeholder="input your dataset's name" 
+                <Input placeholder="https://de.cyverse.org/dl/d/2FFA3458-2DDF-4FCB-B1FE-DF5C08A0BD28/protein.train.csv" 
+                    defaultValue={this.state.urlExample}
                     allowClear 
                     onChange={this.onChangeDataUrl} 
                     className = {Style.dataUrl} />
@@ -139,7 +157,7 @@ class DatasetCreate extends Component {
                 <TextArea
                     className={Style.description}
                     onChange={this.onChangeDescription}
-                    placeholder="Iinput your data"
+                    placeholder=""
                     autoSize={{ minRows: 6}}
                 />
             </div>
@@ -151,7 +169,10 @@ class DatasetCreate extends Component {
                 {dataUrl}
                 {Description}
                 <div style={{paddingTop:'40px'}}>
-                    <Button type="primary" size={'large'} onClick = {this.create}>Create</Button>
+                    <Button type="primary" size={'large'} 
+                        onClick = {this.create}
+                        loading={this.state.loading}
+                        >Create</Button>
                 </div>
             </div>
         )

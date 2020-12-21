@@ -79,9 +79,9 @@ export default class Details extends Component {
                             { this.state.datasetsInfo[showIndex].dataset_name }
                         </Descriptions.Item>
                         <Descriptions.Item label = "Data Type">
-                            { this.state.datasetsInfo[showIndex].dataset_type_name }
+                            SNPs
                         </Descriptions.Item>
-                        <Descriptions.Item label = "Timestamp">
+                        <Descriptions.Item label = "Timestamp" style={{width:'200px'}}>
                             { this.state.datasetsInfo[showIndex].created_at }
                         </Descriptions.Item>
                         <Descriptions.Item label = "Number of samples">
@@ -97,7 +97,7 @@ export default class Details extends Component {
                         <InputNumber onChange = {this.onChangeTrain}
                             className = {Style.editInput}
                             min={0} max={1} step ={0.01} precision = {2}
-                            placeholder = {this.state.persent_train}/>
+                            defaultValue = {this.state.persent_train}/>
                         </Descriptions.Item>
                         <Descriptions.Item label="Number of validation">
                             { Math.round( this.state.datasetsInfo[showIndex].num_samples * percent_valid) }

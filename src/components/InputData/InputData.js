@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Style from './inputdata.module.css'
 import { Select } from 'antd';
 import { Input, Button, message } from 'antd';
+import { Next } from 'react-bootstrap/esm/PageItem';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -15,7 +16,14 @@ export default class InputData extends Component {
             inputData:'',
             SNPsInfo:'',
             experimentInfo:[],
+            loading:props.loading,
         };
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({
+            loading:nextProps.loading
+        })
     }
 
     componentWillMount = () => {
@@ -68,12 +76,11 @@ export default class InputData extends Component {
     };
 
     submit = () => {
-        if (this.state.SNPsInfo !=='' && this.state.inputData!='' && this.state.medel!='') {
-            this.props.submit(this.state.dataType, this.state.model, this.state.inputData, this.state.SNPsInfo)
+        if (this.state.inputData!='' && this.state.medel!='') {
+            this.props.submit(this.state.dataType, this.state.model, this.state.inputData)
         }else{
             message.warning("Invalid Input")
-        }
-        
+        } 
     };
 
     render() {
@@ -99,7 +106,7 @@ export default class InputData extends Component {
         )
         let model = (
             <div style={{paddingTop:'30px'}}>
-                <label className={Style.title}>Model:</label>
+                <label className={Style.title}>Model<span style={{color:'red'}}>*</span>:</label>
                 <br></br>
                 <Select
                     className={Style.selectModel}
@@ -124,7 +131,7 @@ export default class InputData extends Component {
         let inputData=(
             <div style={{clear:'both',paddingTop:'30px'}}>
                 <div className={Style.title}>
-                    <label >Input Data :</label>
+                    <label >Input Data<span style={{color:'red'}}>*</span> :</label>
                     <a href = '###' className = {Style.inputData_a} >example</a>
                     {/* <a href = '###' className = {Style.inputData_a} >upload</a> */}
                 </div>
@@ -154,9 +161,12 @@ export default class InputData extends Component {
                 {/* {dataType} */}
                 {model}
                 {inputData}
-                {SNPsInfo}
+                {/* {SNPsInfo} */}
                 <div style={{paddingTop:'40px'}}>
-                    <Button type="primary" size={'large'} onClick = {this.submit}>Submit</Button>
+                    <Button type="primary" size={'large'} 
+                       onClick = {this.submit}
+                       loading = {this.state.loading}
+                       >Submit</Button>
                 </div>
             </div>
         )

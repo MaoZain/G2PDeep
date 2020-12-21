@@ -9,17 +9,19 @@ export default class Prediction extends Component {
         super(props);
         this.state = {
             result:undefined,
+            loading:false,
         }
     }
 
     submit = (dataType, model, inputData, SNPsInfo) => {
+        this.setState({loading:true})
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         var raw = JSON.stringify(
             {
                 "experiment_info_id":model,
                 "input_data":inputData,
-                "additional_information":SNPsInfo,
+                // "additional_information":SNPsInfo,
             });
         var requestOptions = {
         method: 'POST',
@@ -38,6 +40,7 @@ export default class Prediction extends Component {
             let res = JSON.parse(result).message;
             this.setState({
                 result:res,
+                loading:false,
             })
         }else{
             message.warning('predict failed !')
@@ -47,7 +50,8 @@ export default class Prediction extends Component {
     render() {
         return (
             <div id ='prediction'>
-                <InputData submit = {this.submit} />
+                <InputData submit = {this.submit} 
+                    loading = {this.state.loading} />
                 <Result result = {this.state.result} />
             </div>
         )

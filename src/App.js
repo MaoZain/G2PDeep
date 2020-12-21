@@ -50,9 +50,9 @@ class App extends React.PureComponent {
           </Layout>
           
         </Layout>
-        <div >
+     
           <Footer></Footer>
-        </div>
+
       </Layout>
     );
   }
