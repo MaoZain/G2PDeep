@@ -17,7 +17,7 @@ class ExperimentCompare extends Component {
         this.tableColumns = [
             {
                 title: 'Experoment Name',
-                width: 100,
+                width: 160,
                 dataIndex: 'properties',
                 key: 'name',
                 fixed: 'left',
@@ -83,12 +83,12 @@ class ExperimentCompare extends Component {
                 key:'optimizer'
             },
             {
-                title:'Batch size',
+                title:'Batch Size',
                 dataIndex:'batch_size',
                 key:'batch_size'
             },
             {
-                title:'learning_rate',
+                title:'Learning Rate',
                 dataIndex:'learning_rate',
                 key:'learning_rate'
             },

@@ -52,10 +52,9 @@ export default class ExperimentSummary extends Component {
             selectedRowKeys: [],
             loading: true,
         });
-        
         this.props.compare(this.state.selectedRowKeys)
         // console.log(this.state.selectedRowKeys)
-      };
+    };
     
     onSelectChange = selectedRowKeys => {
         if(selectedRowKeys.length<=4){
@@ -64,7 +63,6 @@ export default class ExperimentSummary extends Component {
         }else{
             message.warning('Choose up to 4 !')
         }
-        
     };
 
     showDetails = (index, id) => {

@@ -148,7 +148,7 @@ export default class ExperimentDetail extends Component {
       }
       console.log(this.state.loadDetailStatus)
 
-      var detailsDes = (
+      let detailsDes = (
           <div id ='empty' style = {{paddingTop:'50px'}}>
               <Empty />
           </div>
@@ -161,6 +161,7 @@ export default class ExperimentDetail extends Component {
       }
       if (!this.state.loadDetailStatus && this.state.detail.length>0) {
           detailsDes = (
+            <div>
               <Descriptions 
                 style = {{width:'950px'}}
                 bordered
@@ -174,6 +175,13 @@ export default class ExperimentDetail extends Component {
                 {this.state.detail[0].experiment_status}
                 </Descriptions.Item>
               </Descriptions>
+              <br></br>
+              <p>Model Details:</p>
+              <br></br>
+              <img src = {this.state.detail[0].model_plot_url}
+                  style={{width:'60%'}}></img>
+                  <br></br>
+            </div>
           )
         }
         return (

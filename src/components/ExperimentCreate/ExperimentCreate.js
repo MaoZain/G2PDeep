@@ -142,7 +142,7 @@ class ExperimentCreate extends Component {
             .then(result => this.checkCreate(result))
             .catch(error => console.log('error', error));
         }else{
-            message.warning('Invalid Input')
+            message.warning('The number of filters in the last layers for both the left and right tower must be the same.')
         }
     }
 
