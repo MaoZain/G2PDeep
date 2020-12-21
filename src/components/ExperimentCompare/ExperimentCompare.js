@@ -5,62 +5,18 @@ import Style from './experimentCompare.module.css'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 
-const options = {
-    chart: {
-      width: 900
-  },
-  title: {
-    text: ''
-  },
-  yAxis: {
-    title: {
-      text: 'Metric'
-    }
-  },
-  xAxis: {
-    title: {
-      text: 'Epochs'
-    }
-  },
-  legend: {
-    layout: 'vertical',
-    align: 'right',
-    verticalAlign: 'middle'
-  },
-  plotOptions: {
-    series: {
-      label: {
-        connectorAllowed: false
-      },
-      pointStart: 1
-    }
-  },
-  series: [],
-  responsive: {
-    rules: [{
-      condition: {
-        maxWidth: 500
-      },
-      chartOptions: {
-        legend: {
-          layout: 'horizontal',
-          align: 'center',
-          verticalAlign: 'bottom'
-        }
-      }
-    }]
-  }
-}
 
 class ExperimentCompare extends Component {
     constructor(props){
         super(props);
         this.state={
-            compareInfo:props.compareInfo
+            compareInfo:props.compareInfo,
+            loading:props.loading,
+            compareChartOfdata:props.compareChartOfdata,
         }
         this.tableColumns = [
             {
-                title: 'Properties',
+                title: 'Experoment Name',
                 width: 100,
                 dataIndex: 'properties',
                 key: 'name',
@@ -72,62 +28,62 @@ class ExperimentCompare extends Component {
                 key:'description',
             },
             {
-                title: 'dataset_name',
+                title: 'Dataset name',
                 dataIndex: 'dataset_name',
                 key:'dataset_name'
             },
             {
-                title: 'Mean Absolute Error(train_metric)',
+                title: 'Mean Absolute Error(train metric)',
                 dataIndex: 'MEAN_ABSOLUTE_ERROR_train',
                 key:'MEAN_ABSOLUTE_ERROR_train'
             },
             {
-                title:'Mean Squared Error(train_metric)',
+                title:'Mean Squared Error(train metric)',
                 dataIndex:'MEAN_SQUARED_ERROR_train',
                 key:'MEAN_SQUARED_ERROR_train'
             },
             {
-                title:'Person Correlation Coefficient(train_metric)',
+                title:'Person Correlation Coefficient(train metric)',
                 dataIndex:'PEARSON_CORRELATION_COEFFICIENT_train',
                 key:'PEARSON_CORRELATION_COEFFICIENT_train'
             },
             {
-                title:'Person Correlation Coefficient(valid_metric)',
+                title:'Person Correlation Coefficient(valid metric)',
                 dataIndex:'PEARSON_CORRELATION_COEFFICIENT_valid',
                 key:'PEARSON_CORRELATION_COEFFICIENT_valid'
             },
             {
-                title:'Mean Absolute Error(valid_metric)',
+                title:'Mean Absolute Error(valid metric)',
                 dataIndex:'MEAN_ABSOLUTE_ERROR_valid',
                 key:'MEAN_ABSOLUTE_ERROR_valid'
             },
             {
-                title:'Mean Squared Error(valid_metric)',
+                title:'Mean Squared Error(valid metric)',
                 dataIndex:'MEAN_SQUARED_ERROR_valid',
                 key:'MEAN_SQUARED_ERROR_valid'
             },
             {
-                title:'loss',
+                title:'Loss',
                 dataIndex:'loss',
                 key:'loss'
             },
             {
-                title:'epochs',
+                title:'Epochs',
                 dataIndex:'epochs',
                 key:'epochs'
             },
             {
-                title:'metrics',
+                title:'Metrics',
                 dataIndex:'metrics',
                 key:'metrics'
             },
             {
-                title:'optimizer',
+                title:'Optimizer',
                 dataIndex:'optimizer',
                 key:'optimizer'
             },
             {
-                title:'batch_size',
+                title:'Batch size',
                 dataIndex:'batch_size',
                 key:'batch_size'
             },
@@ -140,9 +96,11 @@ class ExperimentCompare extends Component {
     }
 
     componentWillReceiveProps = (nextProps) => {
-        console.log(nextProps.compareInfo)
+        // console.log(nextProps.compareInfo)
         this.setState({
             compareInfo:nextProps.compareInfo,
+            loading:nextProps.loading,
+            compareChartOfdata:nextProps.compareChartOfdata
         })
     }
 
@@ -152,18 +110,53 @@ class ExperimentCompare extends Component {
     }
 
     render() {
-        if (this.state.compareInfo.length > 0) {
-            console.log(this.state.compareInfo)
-              let learning_curve_series_data = [];
-              this.state.compareInfo.forEach(element => {
-                learning_curve_series_data = learning_curve_series_data.concat(element.learning_curve_series_data)
-              })
-              for( let data of learning_curve_series_data) {
-                  this.internalChart.addSeries(data);
-                  // console.log(data)
+        let compareData =[]
+        let chartOption = {
+          chart: {
+            width: 900
+          },
+          title: {
+            text: ''
+          },
+          yAxis: {
+            title: {
+              text: 'Metric/Loss'
+            }
+          },
+          xAxis: {
+            title: {
+              text: 'Epochs'
+            }
+          },
+          legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
+          },
+          plotOptions: {
+            series: {
+              label: {
+                connectorAllowed: false
+              },
+              pointStart: 1
+            }
+          },
+          series: this.state.compareChartOfdata,
+          responsive: {
+            rules: [{
+              condition: {
+                maxWidth: 500
+              },
+              chartOptions: {
+                legend: {
+                  layout: 'horizontal',
+                  align: 'center',
+                  verticalAlign: 'bottom'
                 }
+              }
+            }]
           }
-        const compareData =[]
+        }
         let compareTable = (
             <div id ='empty' style = {{paddingTop:'50px'}}>
                 <Empty />
@@ -200,11 +193,11 @@ class ExperimentCompare extends Component {
                  <label className={Style.title}>Summary of experiments: </label>
                  {compareTable}
                 <br></br>
-                <label className={Style.title}>Observation Chart:</label>
+                <label className={Style.title} style={{display:this.state.compareInfo.length>0 ? 'block':'none'}}>Observation Chart:</label>
                 <HighchartsReact 
                     // style ={{width:'900px'}}
                     highcharts={Highcharts}
-                    options={options}
+                    options={chartOption}
                     callback={ this.afterChartCreated }
                 />
             </div>

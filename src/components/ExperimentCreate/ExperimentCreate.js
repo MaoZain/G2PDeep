@@ -33,6 +33,7 @@ class ExperimentCreate extends Component {
             dataset:'',
             datasetInfo:[],
             learningRate:0.00001,
+            loading:false,
         }
     }
 
@@ -99,52 +100,59 @@ class ExperimentCreate extends Component {
         // console.log(fcn_size_arr);
         // console.log(epoch_num)
         // console.log("---------------------");
-
         //fetch to create
-        var myHeaders = new Headers();
-        myHeaders.append("Access-Control-Allow-Origin", "*");
-        myHeaders.append("Content-Type", "application/json");
-        var raw = JSON.stringify(
-            {
-                "localstorage_id":localStorage.getItem('G2PDeep'),
-                "experiment_name":this.state.experimentName,
-                "dataset_info_id":this.state.dataset,
-                "description":this.state.description,
-                "experimental_parameters":
-                {
-                    "learning_rate":this.state.learningRate,
-                    "epochs":epoch_num,
-                    "batch_size":batch_num,
-                },
-                "model_hyperparameters":
-                {
-                    "left_tower_filters_list":left_filters_arr,
-                    "left_tower_kernel_size_list":left_kernel_size_arr,
-                    "right_tower_filters_list":right_filters_arr,
-                    "right_tower_kernel_size_list":right_kernel_size_arr,
-                    "central_tower_filters_list":[10],
-                    "central_tower_kernel_size_list":[4],
-                    "dnn_size_list":fcn_size_arr,
-                }
+        if (left_filters_arr[left_filters_arr.length-1] === right_filters_arr[right_filters_arr.length-1]) {
+            this.setState({
+                loading:true
             });
-        var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-        };
-        fetch("/api/operation/conduct_experiment/", requestOptions)
-        .then(response => response.text())
-        .then(result => this.checkCreate(result))
-        .catch(error => console.log('error', error));
-
+            var myHeaders = new Headers();
+            myHeaders.append("Access-Control-Allow-Origin", "*");
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify(
+                {
+                    "localstorage_id":localStorage.getItem('G2PDeep'),
+                    "experiment_name":this.state.experimentName,
+                    "dataset_info_id":this.state.dataset,
+                    "description":this.state.description,
+                    "experimental_parameters":
+                    {
+                        "learning_rate":this.state.learningRate,
+                        "epochs":epoch_num,
+                        "batch_size":batch_num,
+                    },
+                    "model_hyperparameters":
+                    {
+                        "left_tower_filters_list":left_filters_arr,
+                        "left_tower_kernel_size_list":left_kernel_size_arr,
+                        "right_tower_filters_list":right_filters_arr,
+                        "right_tower_kernel_size_list":right_kernel_size_arr,
+                        "central_tower_filters_list":[10],
+                        "central_tower_kernel_size_list":[4],
+                        "dnn_size_list":fcn_size_arr,
+                    }
+                });
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            fetch("/api/operation/conduct_experiment/", requestOptions)
+            .then(response => response.text())
+            .then(result => this.checkCreate(result))
+            .catch(error => console.log('error', error));
+        }else{
+            message.warning('Invalid Input')
+        }
     }
 
     checkCreate = (result) => {
         let status = JSON.parse(result).status;
-        if (status === 'SUCCESS') {
+        console.log(status)
+        if (status === 'SUCCESS' || status  === 'RUNNING' || status  === 'PEDNING') {
             this.props.fetchExperimentInfo();
             this.props.history.push("/experiment/summary");
+            this.setState({loading:false})
         } else {
             message.warning(JSON.parse(result).message)
         }
@@ -189,7 +197,7 @@ class ExperimentCreate extends Component {
                             //   getAriaValueText={valuetext}
                             aria-labelledby="discrete-slider-small-steps"
                             min={3} max={12} step={1}
-                            valueLabelDisplay="auto"
+                            valueLabelDisplay="on"
                             />
                         <Slider
                             name='left_kernel_size[]'
@@ -198,7 +206,7 @@ class ExperimentCreate extends Component {
                             //   getAriaValueText={valuetext}
                             aria-labelledby="discrete-slider-small-steps"
                             min={4} max={30} step={1}
-                            valueLabelDisplay="auto"
+                            valueLabelDisplay="on"
                             />
                         <img src={cnn} style={{width:'150px', marginLeft:'50px',marginTop:'-20px'}}></img>
                         </div>
@@ -226,7 +234,7 @@ class ExperimentCreate extends Component {
                                 //   getAriaValueText={valuetext}
                                 aria-labelledby="discrete-slider-small-steps"
                                 min={3} max={12} step={1}
-                                valueLabelDisplay="auto"
+                                valueLabelDisplay="on"
                                 />
                             <Slider
                                 name='right_kernel_size[]'
@@ -235,7 +243,7 @@ class ExperimentCreate extends Component {
                                 //   getAriaValueText={valuetext}
                                 aria-labelledby="discrete-slider-small-steps"
                                 min={4} max={30} step={1}
-                                valueLabelDisplay="auto"
+                                valueLabelDisplay="on"
                                 />
                     </div>
                 </div>
@@ -252,7 +260,7 @@ class ExperimentCreate extends Component {
             let temp = [...this.state.fCn];
             temp.push(
                 <div>
-                    <div>
+                    <div style={{paddingTop:'15px'}}>
                         <Slider
                             name='num_fcn[]'
                             style = {{color:'#1165f1',width:'250px'}}
@@ -260,7 +268,7 @@ class ExperimentCreate extends Component {
                             //   getAriaValueText={valuetext}
                             aria-labelledby="discrete-slider-small-steps"
                             min={1} max={512} step={1}
-                            valueLabelDisplay="auto"
+                            valueLabelDisplay="on"
                             />
                         <img src={fcn} style={{width:'300px',marginLeft:'45px'}}></img>
                     </div>
@@ -305,9 +313,9 @@ class ExperimentCreate extends Component {
     }
 
     create = () =>{
-        if (this.state.dataset != '' && this.state.description != '' 
-            && this.state.experimentName != '') {
+        if (this.state.dataset != '' && this.state.experimentName != '') {
             this.fetchToCreate();
+            
         }else{
             message.warning('Invalid Input')
         }
@@ -317,7 +325,7 @@ class ExperimentCreate extends Component {
         // console.log(this.state.a)
         let experimentName = (
             <div id = 'experimentName'>
-                <label className={Style.title}>Experiment Name :</label>
+                <label className={Style.title}>Experiment Name<span style={{color:'red'}}>*</span> :</label>
                 <br></br>
                 <Input placeholder="input your dataset's name" 
                     allowClear 
@@ -327,7 +335,7 @@ class ExperimentCreate extends Component {
         )
         let dataset = (
             <div id = 'dataset' style={{paddingTop:'30px'}}>
-                <label className={Style.title}>Choose dataset :</label>
+                <label className={Style.title}>Choose dataset<span style={{color:'red'}}>*</span> :</label>
                 <br></br>
                 <Select
                     className={Style.dataType}
@@ -382,7 +390,7 @@ class ExperimentCreate extends Component {
         )
         let learningRate =(
             <div style={{paddingTop:'30px'}}>
-                <label className={Style.title}>Learning Rate :</label>
+                <label className={Style.title}>Learning Rate<span style={{color:'red'}}>*</span> :</label>
                 <br></br>
                 <Select
                     className={Style.dataType}
@@ -440,7 +448,7 @@ class ExperimentCreate extends Component {
                         <br></br>
                             <pre>filters         size of flter</pre>
                         </div>
-                        <div>
+                        <div style={{paddingTop:'15px'}}>
                         <Slider
                             name='left_filters[]'
                             style = {{color:'#1165f1',width:'100px'}}
@@ -448,7 +456,7 @@ class ExperimentCreate extends Component {
                             //   getAriaValueText={valuetext}
                             aria-labelledby="discrete-slider-small-steps"
                             min={3} max={12} step={1}
-                            valueLabelDisplay="auto"
+                            valueLabelDisplay="on"
                             />
                         <Slider
                             name='left_kernel_size[]'
@@ -457,7 +465,7 @@ class ExperimentCreate extends Component {
                             //   getAriaValueText={valuetext}
                             aria-labelledby="discrete-slider-small-steps"
                             min={4} max={30} step={1}
-                            valueLabelDisplay="auto"
+                            valueLabelDisplay="on"
                             />
                         <img src={cnn} style={{width:'150px', marginLeft:'50px',marginTop:'-20px'}}></img>
                         </div>
@@ -487,7 +495,7 @@ class ExperimentCreate extends Component {
                             <br></br>
                             <pre>                       filters         size of flter</pre>
                         </div>
-                        <div>
+                        <div style={{paddingTop:'15px'}}>
                         <img src={cnn} style={{width:'150px',marginTop:'-20px'}}></img>
                         <Slider
                             name='right_filters[]'
@@ -495,7 +503,7 @@ class ExperimentCreate extends Component {
                             defaultValue={5}
                             aria-labelledby="discrete-slider-small-steps"
                             min={3} max={12} step={1}
-                            valueLabelDisplay="auto"
+                            valueLabelDisplay="on"
                             />
                         <Slider
                             name='right_kernel_size[]'
@@ -504,7 +512,7 @@ class ExperimentCreate extends Component {
                             //   getAriaValueText={valuetext}
                             aria-labelledby="discrete-slider-small-steps"
                             min={4} max={30} step={1} 
-                            valueLabelDisplay="auto"
+                            valueLabelDisplay="on"
                             />
                         </div>
                         {
@@ -544,7 +552,7 @@ class ExperimentCreate extends Component {
                             value={1}
                             aria-labelledby="discrete-slider-small-steps"
                             min={1} max={512} step={1}
-                            valueLabelDisplay="auto"
+                            valueLabelDisplay="on"
                             />
                         <img src={fcn} style={{width:'300px',marginLeft:'45px'}}></img>
                         </div>
@@ -581,6 +589,7 @@ class ExperimentCreate extends Component {
                 {modeling}
                 <Button type="primary" size='large'
                 style ={{marginTop:'30px'}}
+                loading = {this.state.loading}
                 onClick={this.create}>Create</Button>
             </div>
         )

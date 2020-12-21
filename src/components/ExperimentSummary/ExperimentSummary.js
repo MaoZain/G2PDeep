@@ -7,7 +7,7 @@ export default class ExperimentSummary extends Component {
         super(props);
         this.state = {
             selectedRowKeys: [], // Check here to configure the default column
-            loading: false,
+            loading: props.loading,
             experimentInfo:props.experimentInfo,
         }
         this.tableColumns = [
@@ -42,18 +42,16 @@ export default class ExperimentSummary extends Component {
       // console.log(nextProps.datasetsInfo)
       this.setState({
         experimentInfo:nextProps.experimentInfo,
+        loading:nextProps.loading
       });
     }
 
     compare = () => {
-        this.setState({ loading: true });
         //ajax request after empty completing
-        setTimeout(() => {
-            this.setState({
-                selectedRowKeys: [],
-                loading: false,
-          });
-        }, 3000);
+        this.setState({
+            selectedRowKeys: [],
+            loading: true,
+        });
         
         this.props.compare(this.state.selectedRowKeys)
         // console.log(this.state.selectedRowKeys)
@@ -84,7 +82,7 @@ export default class ExperimentSummary extends Component {
         const data_table = []
         this.state.experimentInfo.forEach((element,index) => {
             // success ruuning 
-            if(element.experiment_status === 'SUCCESS' ){
+            if(element.experiment_status === 'SUCCESS' || element.experiment_status === 'RUNNING' || element.experiment_status === 'PENDING'){
                 data_table.push(
                     {
                       name: <a onClick = {() => {this.showDetails(index, element.experiment_info_id)}}><Link to="/experiment/detail">{element.experiment_name}</Link></a>,
@@ -96,14 +94,22 @@ export default class ExperimentSummary extends Component {
                     }
                   )
             }else{
-                // failed
-                console.log("Failed")
+                data_table.push(
+                    {
+                      name: element.experiment_name,
+                      description:element.description,
+                      createdDate:element.created_at,
+                      updatedDate:element.updated_at,
+                      status:element.experiment_status,
+                      key:element.experiment_info_id,
+                    }
+                  )
             }
         })
         return (
             <div id = 'experiment_summary_content' style = {{width:'850px'}}>
                 <div style={{ marginBottom: 16 }}>
-                <Button type="primary" onClick={this.compare} disabled={!hasSelected} loading={loading}>
+                <Button type="primary" onClick={this.compare} loading={loading}>
                     Compare
                 </Button>
                 <span style={{ marginLeft: 8 }}>
