@@ -1,0 +1,119 @@
+<!-- Example from https://www.highcharts.com/demo/line-basic -->
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<figure class="highcharts-figure">
+  <div id="learning_curve_container"></div>
+</figure>
+
+
+<script>
+
+  $(document).ready(function () {
+
+    // figure
+    line_chart = new Highcharts.chart('learning_curve_container', {
+
+      title: {
+        text: 'Learning Curve'
+      },
+      yAxis: {
+        title: {
+          text: 'Metric'
+        }
+      },
+      xAxis: {
+        title: {
+          text: 'Epochs'
+        }
+      },
+      legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'middle'
+      },
+      plotOptions: {
+        series: {
+          label: {
+            connectorAllowed: false
+          },
+          pointStart: 1
+        }
+      },
+
+      series: [],
+      responsive: {
+        rules: [{
+          condition: {
+            maxWidth: 500
+          },
+          chartOptions: {
+            legend: {
+              layout: 'horizontal',
+              align: 'center',
+              verticalAlign: 'bottom'
+            }
+          }
+        }]
+      }
+    });
+
+
+    // TODO(ziting): loading corresponding data by the API.  
+    // data from api
+    var learning_curve_series_data = [
+      {
+        "name": "Training dataset: train loss",
+        "data": [
+          2.4451346397399902,
+          1.9516032934188843,
+          1.695474624633789,
+          1.576974868774414,
+          1.5339159965515137
+        ]
+      },
+      {
+        "name": "Training dataset: validation loss",
+        "data": [
+          1.358521580696106,
+          1.3029674291610718,
+          1.2679880857467651,
+          1.2411470413208008,
+          1.221661925315857
+        ]
+      },
+      {
+        "name": "Training dataset: train metric",
+        "data": [
+          1.1105625629425049,
+          0.9579770565032959,
+          0.8765981793403625,
+          0.8559929728507996,
+          0.8396007418632507
+        ]
+      },
+      {
+        "name": "Training dataset: validation metric",
+        "data": [
+          0.7220026850700378,
+          0.7083120942115784,
+          0.7021886110305786,
+          0.6986086964607239,
+          0.6974907517433167
+        ]
+      }
+    ];
+
+    // loading data
+    for( data of learning_curve_series_data) {
+      line_chart.addSeries(data);
+      console.log(data)
+    }
+
+  });
+</script>

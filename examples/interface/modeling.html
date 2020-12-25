@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+
+<!-- 
+    network image
+    https://www.dlology.com/blog/top-10-deep-learning-experiences-run-on-your-browser/ 
+
+
+    Fully connected neural network:
+    https://raw.githubusercontent.com/shuaizengMU/AI_frontend/main/interface/img/fcn.png?token=AD63QA7QIHH2RBVWSXSAFL274R6OW
+
+  -->
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- https://mdbootstrap.com/docs/standard/forms/range/ -->
+  <!-- Font Awesome -->
+  <link href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/2.2.1/mdb.min.css" rel="stylesheet" />
+
+  <title>Hello, world!</title>
+</head>
+
+<body>
+
+
+  <div class="container">
+    <h1>Hello World!</h1>
+
+
+
+    <div class="row">
+      <!-- Dataset -->
+      <div class="col-sm-12 " style="background-color:rgb(250, 234, 234);">
+
+        <div class="row">
+          <b>Input</b>
+          <div class="col-md-5 col-sm-5">
+          </div>
+          <div class="col-md-6 col-sm-6">
+            <img src="https://img.icons8.com/wired/2x/export-csv.png" class="img-responsive center-block" />
+          </div>
+
+          <div class="col-md-5 col-sm-5">
+          </div>
+          <div class="col-md-1 col-sm-1">
+            <img src="https://www.shareicon.net/data/128x128/2015/11/20/675054_arrows_512x512.png" width="32"
+              height="32" class="rounded float-left img-fluid ">
+          </div>
+          <div class="col-md-1 col-sm-1">
+            <img src="https://www.shareicon.net/data/128x128/2015/11/20/675054_arrows_512x512.png" width="32"
+              height="32" class="rounded float-left img-fluid ">
+          </div>
+        </div>
+
+      </div>
+      <!-- Two towers -->
+      <div class="col-sm-6 " style="background-color:rgb(255, 255, 208);">
+        <div class="d-flex flex-row-reverse" id='left_column'>
+
+          <div class="row col-sm-12" id="left_tower_wrapper">
+            <b>Left Tower (CNN)</b>
+            <!-- buttons left -->
+            <div class="row">
+              <div class="col-md-6 col-sm-6">
+                <b>Add/Delete layer (min:1, max:3)</b>
+              </div>
+              <div class="col-md-3 col-sm-3">
+                <button id='left_add_btn' type="button" class="btn btn-primary">Add layer</button>
+              </div>
+              <div class="col-md-3 col-sm-3">
+                <button id='left_delete_btn' type="button" class="btn btn-danger">Delete layer</button>
+              </div>
+            </div>
+
+            <!-- labels left -->
+            <div class="row">
+              <div class="col-md-3 col-sm-3">
+                <p>filters</p>
+              </div>
+              <div class="col-md-3 col-sm-3">
+                <p>size of flter</p>
+              </div>
+              <div class="col-md-3 col-sm-3">
+              </div>
+            </div>
+
+            <!-- 1st left -->
+            <div class="row">
+              <div class="col-md-3 col-sm-3">
+                <div class="range">
+                  <input type="range" class="form-range" min="3" max="12" step="1" name="left_filters[]" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3">
+                <div class="range">
+                  <input type="range" class="form-range" min="4" max="30" step="1" value=10 name="left_kernel_size[]" />
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-6">
+                <img
+                  src="https://raw.githubusercontent.com/shuaizengMU/AI_frontend/main/interface/img/cnn.png?token=AD63QAZIFP5MXLCCQGQOHXS74R2PW"
+                  class="rounded float-left img-fluid">
+              </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="col-md-8 col-sm-8">
+                </div>
+                <div class="col-md-4 col-sm-4 ">
+                  <img src="https://www.shareicon.net/data/128x128/2015/11/20/675054_arrows_512x512.png"
+                    width="32" height="32"
+                    class="rounded float-left img-fluid ">
+                </div>
+              </div> -->
+
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="col-sm-6" style="background-color:rgb(229, 226, 250);">
+        <div class="d-flex flex-row">
+          <div class="row col-sm-12" id="right_tower_wrapper">
+            <!-- buttons right -->
+            <b>Right Tower (CNN)</b>
+            <div class="row">
+              <div class="col-md-3 col-sm-3">
+                <button id='right_add_btn' type="button" class="btn btn-primary">Add layer</button>
+              </div>
+              <div class="col-md-3 col-sm-3">
+                <button id='right_delete_btn' type="button" class="btn btn-danger">Delete layer</button>
+              </div>
+              <div class="col-md-6 col-sm-6">
+                <b>Add/Delete layer (min:1, max:3)</b>
+              </div>
+            </div>
+
+            <!-- labels right -->
+            <div class="row">
+              <div class="col-md-6 col-sm-6">
+              </div>
+              <div class="col-md-3 col-sm-3">
+                <p>filters</p>
+              </div>
+              <div class="col-md-3 col-sm-3">
+                <p>size of flter</p>
+              </div>
+            </div>
+
+            <!-- 1st right -->
+            <div class="row">
+              <div class="col-md-6 col-sm-6">
+                <img
+                  src="https://raw.githubusercontent.com/shuaizengMU/AI_frontend/main/interface/img/cnn.png?token=AD63QAZIFP5MXLCCQGQOHXS74R2PW"
+                  class="rounded float-left img-fluid">
+              </div>
+              <div class="col-md-3 col-sm-3">
+                <div class="range">
+                  <input type="range" class="form-range" min="3" max="12" step="1" name="right_filters[]" />
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-3">
+                <div class="range">
+                  <input type="range" class="form-range" min="4" max="30" step="1" value=10
+                    name="right_kernel_size[]" />
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="col-md-2 col-sm-2">
+                </div>
+                <div class="col-md-4 col-sm-4 ">
+                  <img src="https://www.shareicon.net/data/128x128/2015/11/20/675054_arrows_512x512.png"
+                    width="32" height="32"
+                    class="rounded float-left img-fluid ">
+                </div>
+                <div class="col-md-6 col-sm-6">
+                </div>
+              </div> -->
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Fully connected neural network -->
+
+      <div class="col-sm-12 " style="background-color:rgb(227, 252, 228);">
+        <div class="row">
+          <b>Fully connected neural network</b>
+
+
+          <div class="col-md-2 col-sm-2">
+            <button id='add_fcn_btn' type="button" class="btn btn-primary">Add layer</button>
+          </div>
+          <div class="col-md-2 col-sm-2">
+            <button id='delete_fcn_btn' type="button" class="btn btn-danger">Delete layer</button>
+          </div>
+
+          <div class="row" id="fully_connected_wrapper">
+          </div>
+
+
+          <div class="row">
+
+            <!-- Arrow -->
+            <div class="row">
+              <div class="col-md-4 col-sm-4">
+              </div>
+              <div class="col-md-3 col-sm-3 ">
+                <img src="https://www.shareicon.net/data/128x128/2015/11/20/675054_arrows_512x512.png" width="32"
+                  height="32" class="rounded float-left img-fluid ">
+              </div>
+              <div class="col-md-3 col-sm-3 ">
+                <img src="https://www.shareicon.net/data/128x128/2015/11/20/675054_arrows_512x512.png" width="32"
+                  height="32" class="rounded float-left img-fluid ">
+              </div>
+            </div>
+            
+            <!-- fcn -->
+            <div class="col-md-4 col-sm-4">
+              <div class="range">
+                <div class="range">
+                  <input type="range" class="form-range" min="1" max="512" step="1" value=1 name="num_fcn[]" />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <img
+                src="https://raw.githubusercontent.com/shuaizengMU/AI_frontend/main/interface/img/fcn.png?token=AD63QA7QIHH2RBVWSXSAFL274R6OW"
+                class="rounded float-left img-fluid ">
+            </div>
+            <div class="col-md-4 col-sm-4">
+              <p>Loss function: Mean square error</p>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+
+    </div>
+
+    <button id='submit_btn' type="button" class="btn btn-primary">submit</button>
+  </div>
+
+
+
+
+  <!-- Optional JavaScript; choose one of the two! -->
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+    crossorigin="anonymous"></script>
+
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+    -->
+</body>
+
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/2.2.1/mdb.min.js"></script>
+<script>
+  $(document).ready(function () {
+    var max_left_layers = 3; //maximum input boxes allowed
+    var max_right_layers = 3; //maximum input boxes allowed
+    var max_fcn_layers = 3; //maximum input boxes allowed
+
+    var num_left_layer = 1; //initlal text box count
+    var num_right_layer = 1; //initlal text box count
+    var num_fnc_layer = 1; //initlal text box count
+
+    // Adding layer
+
+    $("#left_add_btn").click(function () {
+      if (num_left_layer < max_left_layers) { //max input box allowed
+        num_left_layer++; //text box increment
+        $("#left_tower_wrapper").append('<div class="row"> <div class="col-md-8 col-sm-8"> </div> <div class="col-md-4 col-sm-4 "> <img src="https://www.shareicon.net/data/128x128/2015/11/20/675054_arrows_512x512.png" width="32" height="32" class="rounded float-left img-fluid "> </div> </div><div class="row"> <div class="col-md-3 col-sm-3"> <div class="range"> <input type="range" class="form-range" min="3" max="12" step="1" value=10 name="left_filters[]" /> </div> </div> <div class="col-md-3 col-sm-3"> <div class="range"> <input type="range" class="form-range" min="4" max="30" step="1" value=10 name="left_kernel_size[]" /> </div> </div> <div class="col-md-6 col-sm-6"> <img src="https://raw.githubusercontent.com/shuaizengMU/AI_frontend/main/interface/img/cnn.png?token=AD63QAZIFP5MXLCCQGQOHXS74R2PW" class="rounded float-left img-fluid"> </div> </div>'); //add input box
+      }
+    });
+
+    $("#right_add_btn").click(function () {
+      if (num_right_layer < max_right_layers) { //max input box allowed
+        num_right_layer++; //text box increment
+        $("#right_tower_wrapper").append('<div class="row"> <div class="col-md-2 col-sm-2"> </div> <div class="col-md-4 col-sm-4 "> <img src="https://www.shareicon.net/data/128x128/2015/11/20/675054_arrows_512x512.png" width="32" height="32" class="rounded float-left img-fluid "> </div> <div class="col-md-6 col-sm-6"> </div> </div><div class="row"> <div class="col-md-6 col-sm-6"> <img src="https://raw.githubusercontent.com/shuaizengMU/AI_frontend/main/interface/img/cnn.png?token=AD63QAZIFP5MXLCCQGQOHXS74R2PW" class="rounded float-left img-fluid"> </div> <div class="col-md-3 col-sm-3"> <div class="range"> <input type="range" class="form-range" min="3" max="12" step="1" name="right_filters[]" /> </div> </div> <div class="col-md-3 col-sm-3"> <div class="range"> <input type="range" class="form-range" min="4" max="30" step="1" value=10 name="right_kernel_size[]" /> </div> </div> </div>'); //add input box
+      }
+    });
+
+    $("#add_fcn_btn").click(function () {
+      if (num_fnc_layer < max_fcn_layers) { //max input box allowed
+        num_fnc_layer++; //text box increment
+        $("#fully_connected_wrapper").append('<div class="row"> <!-- Arrow --> <div class="row"> <div class="col-md-4 col-sm-4"> </div> <div class="col-md-3 col-sm-3 "> <img src="https://www.shareicon.net/data/128x128/2015/11/20/675054_arrows_512x512.png" width="32" height="32" class="rounded float-left img-fluid "> </div> <div class="col-md-3 col-sm-3 "> <img src="https://www.shareicon.net/data/128x128/2015/11/20/675054_arrows_512x512.png" width="32" height="32" class="rounded float-left img-fluid "> </div> </div> <!-- fcn --> <div class="col-md-4 col-sm-4"> <div class="range"> <input type="range" class="form-range" min="3" max="12" step="1" name="num_fcn[]" /> </div> </div> <div class="col-md-6 col-sm-6"> <img src="https://raw.githubusercontent.com/shuaizengMU/AI_frontend/main/interface/img/fcn.png?token=AD63QA7QIHH2RBVWSXSAFL274R6OW" class="rounded float-left img-fluid "> </div> </div>'); //add input box
+      }
+    });
+
+    // delete layer
+    $("#left_delete_btn").click(function () {
+      if (1 < num_left_layer) { //max input box allowed
+        $("#left_tower_wrapper").children('.row').last().remove();
+        $("#left_tower_wrapper").children('.row').last().remove();
+        num_left_layer--;
+      }
+    });
+    $("#right_delete_btn").click(function () {
+      if (1 < num_right_layer) { //max input box allowed
+        $("#right_tower_wrapper").children('.row').last().remove();
+        $("#right_tower_wrapper").children('.row').last().remove();
+        num_right_layer--;
+      }
+    });
+    $("#delete_fcn_btn").click(function () {
+      if (1 < num_fnc_layer) { //max input box allowed
+        $("#fully_connected_wrapper").children('.row').last().remove();
+        // $("#fully_connected_wrapper").children('.row').last().remove();
+        num_fnc_layer--;
+      }
+    });
+
+
+    $("#submit_btn").click(function () {
+
+      var left_filters_arr = new Array();
+      var left_kernel_size_arr = new Array();
+
+      var right_filters_arr = new Array();
+      var right_kernel_size_arr = new Array();
+
+      var fcn_size_arr = new Array();
+
+      // Get values
+      $("input[name='left_filters[]']").each(function () {
+        left_filters_arr.push(parseInt($(this).val()));
+      });
+      $("input[name='left_kernel_size[]']").each(function () {
+        left_kernel_size_arr.push(parseInt($(this).val()));
+      });
+
+      $("input[name='right_filters[]']").each(function () {
+        right_filters_arr.push(parseInt($(this).val()));
+      });
+      $("input[name='right_kernel_size[]']").each(function () {
+        right_kernel_size_arr.push(parseInt($(this).val()));
+      });
+
+
+      $("input[name='num_fcn[]']").each(function () {
+        fcn_size_arr.push(parseInt($(this).val()));
+      });
+      
+
+      console.log(left_filters_arr);
+      console.log(left_kernel_size_arr);
+      console.log(right_filters_arr);
+      console.log(right_kernel_size_arr);
+      console.log(fcn_size_arr);
+      console.log("----");
+    });
+
+
+
+
+
+  });
+</script>
+
+</html>

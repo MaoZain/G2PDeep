@@ -2,12 +2,15 @@ version: '3'
 
 services:
   web:
-    build: .
-    # image: dm3loc/mrna_web
-    # stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: "G2PDeep-Frontend"
     command: sh -c "export PORT=3335 && npm start"
     tty: true
+    volumes:
+      - ${PWD}:/usr/src/app
+      - '/usr/src/app/node_modules'
     expose: 
       - 80
     ports:
