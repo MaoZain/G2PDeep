@@ -6,10 +6,13 @@ import Slider from '@material-ui/core/Slider';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import {Typography} from '@material-ui/core'
-import csvImg from './export-csv.png'
+import csvImg from './csv_file.png'
 import arrowInput from './arrow-input.png'
 import cnn from './cnn.png'
-import fcn from './fcn.png'
+import cnn_yellow from './cnn_yellow.png'
+import cnn_green from './cnn_green.png'
+import dnn_layer from './dnn_layer.png'
+import dnn_output from './dnn_output.png'
 import $ from 'jquery'
 import { withRouter } from 'react-router-dom'
 
@@ -208,7 +211,7 @@ class ExperimentCreate extends Component {
                             min={4} max={30} step={1}
                             valueLabelDisplay="on"
                             />
-                        <img src={cnn} style={{width:'150px', marginLeft:'50px',marginTop:'-20px'}}></img>
+                        <img src={cnn_yellow} style={{width:'150px', marginLeft:'50px',marginTop:'-20px'}}></img>
                         </div>
                 </div>
             )
@@ -226,7 +229,7 @@ class ExperimentCreate extends Component {
                 <div>
                     <img src={arrowInput} style={{height:'20px', marginLeft:'60px', marginBottom:'10px'}}></img>
                     <div>
-                    <img src={cnn} style={{width:'150px',marginTop:'-20px'}}></img>
+                    <img src={cnn_green} style={{width:'150px',marginTop:'-20px'}}></img>
                             <Slider
                                 name='right_filters[]'
                                 style = {{color:'#1165f1',width:'100px',marginLeft:'45px'}}
@@ -264,13 +267,13 @@ class ExperimentCreate extends Component {
                         <Slider
                             name='num_fcn[]'
                             style = {{color:'#1165f1',width:'250px'}}
-                            defaultValue={1}
+                            defaultValue={256}
                             //   getAriaValueText={valuetext}
                             aria-labelledby="discrete-slider-small-steps"
                             min={1} max={512} step={1}
                             valueLabelDisplay="on"
                             />
-                        <img src={fcn} style={{width:'300px',marginLeft:'45px'}}></img>
+                        <img src={dnn_layer} style={{width:'200px',marginLeft:'100px'}}></img>
                     </div>
                     <div style={{textAlign:'center'}}>
                         <img src={arrowInput} style={{height:'32px',marginRight:'50px'}}></img>
@@ -419,9 +422,9 @@ class ExperimentCreate extends Component {
                 <label className={Style.title}>Hyperparameters :</label>
                 <Grid container >
                     {/* top layer */}
-                    <Grid xs={12} style={{backgroundColor:'rgb(250, 234, 234)'}}>
+                    <Grid xs={12} style={{backgroundColor:'rgb(250, 234, 234, 0.4)'}}>
                         <div style={{textAlign:'center'}}>
-                            <img src={csvImg}></img>
+                            <img src={csvImg} style={{width:'100px', marginLeft:'15px',marginTop:''}}></img>
                         </div>
                         <div style={{textAlign:'center'}}>
                             <img src={arrowInput} style={{height:'32px',marginRight:'50px'}}></img>
@@ -429,7 +432,7 @@ class ExperimentCreate extends Component {
                         </div>
                     </Grid>
                     {/* sencond layer left */}
-                    <Grid name = 'leftCNN'xs={6} style={{backgroundColor:'rgb(255, 255, 208)', padding:'5px'}}>
+                    <Grid name = 'leftCNN'xs={6} style={{backgroundColor:'rgba(255, 255, 208, 0.4)', padding:'5px'}}>
                         <div style={{textAlign:'center'}}>
                           <Typography variant="subtitle1">Left Tower (CNN)</Typography>
                         </div>
@@ -446,7 +449,7 @@ class ExperimentCreate extends Component {
                         </div>
                         <div>
                         <br></br>
-                            <pre>filters         size of flter</pre>
+                            <pre>filters         kernel size</pre>
                         </div>
                         <div style={{paddingTop:'15px'}}>
                         <Slider
@@ -467,7 +470,7 @@ class ExperimentCreate extends Component {
                             min={4} max={30} step={1}
                             valueLabelDisplay="on"
                             />
-                        <img src={cnn} style={{width:'150px', marginLeft:'50px',marginTop:'-20px'}}></img>
+                        <img src={cnn_yellow} style={{width:'150px', marginLeft:'50px',marginTop:'-20px'}}></img>
                         </div>
                         {
                             this.state.leftCnn.map(element =>{
@@ -476,7 +479,7 @@ class ExperimentCreate extends Component {
                         }
                     </Grid>
                     {/* second layer right */}
-                    <Grid xs={6} style={{backgroundColor:'rgb(227, 252, 228)',padding:'5px'}}>
+                    <Grid xs={6} style={{backgroundColor:'rgba(227, 252, 228, 0.4)',padding:'5px'}}>
                         <div style={{textAlign:'center'}}>
                           <Typography variant="subtitle1">Right Tower (CNN)</Typography>
                         </div>
@@ -493,10 +496,10 @@ class ExperimentCreate extends Component {
                         </div>
                         <div>
                             <br></br>
-                            <pre>                       filters         size of flter</pre>
+                            <pre>                       filters         kernel size</pre>
                         </div>
                         <div style={{paddingTop:'15px'}}>
-                        <img src={cnn} style={{width:'150px',marginTop:'-20px'}}></img>
+                        <img src={cnn_green} style={{width:'150px',marginTop:'-20px'}}></img>
                         <Slider
                             name='right_filters[]'
                             style = {{color:'#1165f1',width:'100px',marginLeft:'45px'}}
@@ -522,12 +525,12 @@ class ExperimentCreate extends Component {
                         }
                     </Grid>
                     {/* last layer */}
-                    <Grid xs={12} style={{backgroundColor:'rgb(229, 226, 250)',padding:'5px'}}>
+                    <Grid xs={12} style={{backgroundColor:'rgb(229, 226, 250, 0.4)',padding:'5px'}}>
                         <div style={{textAlign:'center'}}>
                             <img src={arrowInput} style={{height:'32px',marginRight:'50px'}}></img>
                             <img src={arrowInput} style={{height:'32px'}}></img>
                         </div>
-                        <div>
+                        <div style={{paddingBottom:'20px'}}>
                             <span style={{marginLeft:'100px'}}>Size</span>
                             <span variant="subtitle1" style={{marginLeft:'200px'}}>Fully connected neural network</span>
                             <Button type='primary' size='small' 
@@ -554,7 +557,7 @@ class ExperimentCreate extends Component {
                             min={1} max={512} step={1}
                             valueLabelDisplay="on"
                             />
-                        <img src={fcn} style={{width:'300px',marginLeft:'45px'}}></img>
+                        <img src={dnn_output} style={{width:'22px',marginLeft:'180px'}}></img>
                         </div>
                     </Grid>
                 </Grid>
