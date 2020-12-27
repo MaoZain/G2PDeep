@@ -3,14 +3,16 @@ import { Table, Input, Button, Space } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import { Typography } from 'antd';
+const { Title } = Typography;
 
 export default class Summary extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       searchText: '',
       searchedColumn: '',
-      datasetsInfo:props.datasetsInfo,
+      datasetsInfo: props.datasetsInfo,
     };
     this.columns_table = [
       {
@@ -40,7 +42,7 @@ export default class Summary extends Component {
       },
     ];
   }
-    
+
   getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
@@ -89,8 +91,8 @@ export default class Summary extends Component {
           textToHighlight={text ? text.toString() : ''}
         />
       ) : (
-        text
-      ),
+          text
+        ),
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -105,11 +107,11 @@ export default class Summary extends Component {
     clearFilters();
     this.setState({ searchText: '' });
   };
-  
+
   componentWillReceiveProps = (nextProps) => {
     // console.log(nextProps.datasetsInfo)
     this.setState({
-      datasetsInfo:nextProps.datasetsInfo,
+      datasetsInfo: nextProps.datasetsInfo,
     });
   }
 
@@ -120,27 +122,30 @@ export default class Summary extends Component {
 
   render() {
     const data_table = []
-    this.state.datasetsInfo.forEach((element,index) => {
+    this.state.datasetsInfo.forEach((element, index) => {
       let num_milliseconds = Date.parse(element.created_at);
       let date = new Date(num_milliseconds)
       let report_time = date.toLocaleString('en-US',);
       data_table.push(
         {
-          id: index+1,
-          key:element.dataset_info_id,
-          name: <a onClick = {() => {this.showDetails(index, element.dataset_info_id)}}><Link to="/datasets/details">{element.dataset_name}</Link></a>,
+          id: index + 1,
+          key: element.dataset_info_id,
+          name: <a onClick={() => { this.showDetails(index, element.dataset_info_id) }}><Link to="/datasets/details">{element.dataset_name}</Link></a>,
           NumberOfSamples: element.num_samples,
           date: report_time,
         }
       )
     })
-      
+
     return (
-        <div id = 'dataTable' style = {{width:'850px'}}>
-            <Table 
-            columns={this.columns_table} dataSource={data_table} 
-            bordered/>
+      <div>
+        <Title level={2}>Summary of datasets</Title>
+        <div id='dataTable' style={{ width: '850px', paddingTop:'40px' }}>
+          <Table
+            columns={this.columns_table} dataSource={data_table}
+            bordered />
         </div>
+      </div>
     )
   }
 }

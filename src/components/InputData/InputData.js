@@ -3,6 +3,8 @@ import Style from './inputdata.module.css'
 import { Select } from 'antd';
 import { Input, Button, message } from 'antd';
 import { Next } from 'react-bootstrap/esm/PageItem';
+import { Typography } from 'antd';
+const { Title } = Typography;
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -158,6 +160,7 @@ export default class InputData extends Component {
         )
         return (
             <div>
+                <Title level={2}>Prediction and discovery</Title>
                 {/* {dataType} */}
                 {model}
                 {inputData}

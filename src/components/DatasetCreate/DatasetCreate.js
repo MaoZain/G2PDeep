@@ -4,8 +4,12 @@ import Style from './datasetCreate.module.css'
 import { Input, Button, message } from 'antd';
 import { withRouter } from 'react-router-dom'
 import { Text } from "informed";
+import { Typography } from 'antd';
+const { Title } = Typography;
+
 // const { Option } = Select;
 const { TextArea } = Input;
+
 
 class DatasetCreate extends Component {
   constructor(props, context) {
@@ -175,15 +179,18 @@ class DatasetCreate extends Component {
     )
     return (
       <div>
-        {datasetName}
-        {/* {dataType} */}
-        {dataUrl}
-        {Description}
+        <Title level={2}>Creating dataset</Title>
         <div style={{ paddingTop: '40px' }}>
-          <Button type="primary" size={'large'}
-            onClick={this.create}
-            loading={this.state.loading}
-          >Create</Button>
+          {datasetName}
+          {/* {dataType} */}
+          {dataUrl}
+          {Description}
+          <div style={{ paddingTop: '40px' }}>
+            <Button type="primary" size={'large'}
+              onClick={this.create}
+              loading={this.state.loading}
+            >Create</Button>
+          </div>
         </div>
       </div>
     )

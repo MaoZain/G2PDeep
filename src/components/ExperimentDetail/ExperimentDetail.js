@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Descriptions, Badge, Empty, Spin } from 'antd';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
+import { Typography } from 'antd';
+const { Title } = Typography;
 
 export default class ExperimentDetail extends Component {
     constructor(props){
@@ -192,7 +194,9 @@ export default class ExperimentDetail extends Component {
           )
         }
         return (
-            <div >
+          <div>
+            <Title level={2}>Experiment details</Title>
+            <div style={{paddingTop:'40px'}}>
                 {detailsDes}
                 <br></br>
                 <div style={{display:this.state.detail.length>0 ? 'block':'none'}}>
@@ -213,6 +217,8 @@ export default class ExperimentDetail extends Component {
                   />
                 </div>
             </div>
+          </div>
+            
         )
     }
 }

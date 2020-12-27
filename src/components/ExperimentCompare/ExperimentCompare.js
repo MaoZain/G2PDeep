@@ -4,7 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Style from './experimentCompare.module.css'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-
+import { Typography } from 'antd';
+const { Title } = Typography;
 
 class ExperimentCompare extends Component {
     constructor(props){
@@ -193,6 +194,8 @@ class ExperimentCompare extends Component {
         }
         return (
             <div>
+              <Title level={2}>Comparison of methods experiment</Title>
+              <div style={{paddingTop:'40px'}}>
                  <label className={Style.title}>Summary of experiments: </label>
                  {compareTable}
                 <br></br>
@@ -203,6 +206,7 @@ class ExperimentCompare extends Component {
                     options={chartOption}
                     callback={ this.afterChartCreated }
                 />
+              </div>
             </div>
         )
     }
