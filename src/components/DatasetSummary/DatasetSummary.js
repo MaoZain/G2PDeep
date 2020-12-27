@@ -121,13 +121,16 @@ export default class Summary extends Component {
   render() {
     const data_table = []
     this.state.datasetsInfo.forEach((element,index) => {
+      let num_milliseconds = Date.parse(element.created_at);
+      let date = new Date(num_milliseconds)
+      let report_time = date.toLocaleString('en-US',);
       data_table.push(
         {
           id: index+1,
           key:element.dataset_info_id,
           name: <a onClick = {() => {this.showDetails(index, element.dataset_info_id)}}><Link to="/datasets/details">{element.dataset_name}</Link></a>,
           NumberOfSamples: element.num_samples,
-          date: element.created_at,
+          date: report_time,
         }
       )
     })

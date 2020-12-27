@@ -66,7 +66,12 @@ export default class Details extends Component {
         )
         if (this.state.datasetsInfo.length > 0) {
             let showIndex = this.state.showIndex;
-            let percent_valid = ( 1000-1000*this.state.persent_train )/1000
+            let percent_valid = ( 1000-1000*this.state.persent_train )/1000;
+
+            // Created time
+            let num_milliseconds = Date.parse(this.state.datasetsInfo[showIndex].created_at);
+            let date = new Date(num_milliseconds)
+            let created_time = date.toLocaleString('en-US',);
             // console.log(this.state.persent_train)
             detailsDes = (
                 <div>
@@ -81,8 +86,8 @@ export default class Details extends Component {
                         <Descriptions.Item label = "Data Type">
                             SNPs
                         </Descriptions.Item>
-                        <Descriptions.Item label = "Timestamp" style={{width:'200px'}}>
-                            { this.state.datasetsInfo[showIndex].created_at }
+                        <Descriptions.Item label = "Created time" style={{width:'250px'}}>
+                            { created_time }
                         </Descriptions.Item>
                         <Descriptions.Item label = "Number of samples">
                             { this.state.datasetsInfo[showIndex].num_samples }

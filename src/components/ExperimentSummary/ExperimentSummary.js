@@ -16,21 +16,17 @@ export default class ExperimentSummary extends Component {
                 dataIndex: 'name',
             },
             {
-                title: 'Description',
-                dataIndex: 'description',
+                title:'Status',
+                dataIndex:'status',
             },
             {
                 title: 'Created Date',
                 dataIndex: 'createdDate',
             },
             {
-                title: 'Updated Date',
-                dataIndex: 'updatedDate',
+                title: 'Description',
+                dataIndex: 'description',
             },
-            {
-                title:'Status',
-                dataIndex:'status',
-            }
         ]
     }
 
@@ -79,13 +75,18 @@ export default class ExperimentSummary extends Component {
         const hasSelected = selectedRowKeys.length > 0;
         const data_table = []
         this.state.experimentInfo.forEach((element,index) => {
+            // created time
+            let num_milliseconds = Date.parse(element.created_at);
+            const date = new Date(num_milliseconds)
+            const created_time = date.toLocaleString('en-US',);
+
             // success ruuning 
             if(element.experiment_status === 'SUCCESS' || element.experiment_status === 'RUNNING' || element.experiment_status === 'PENDING'){
                 data_table.push(
                     {
                       name: <a onClick = {() => {this.showDetails(index, element.experiment_info_id)}}><Link to="/experiment/detail">{element.experiment_name}</Link></a>,
                       description:element.description,
-                      createdDate:element.created_at,
+                      createdDate:created_time,
                       updatedDate:element.updated_at,
                       status:element.experiment_status,
                       key:element.experiment_info_id,
@@ -96,7 +97,7 @@ export default class ExperimentSummary extends Component {
                     {
                       name: element.experiment_name,
                       description:element.description,
-                      createdDate:element.created_at,
+                      createdDate:created_time,
                       updatedDate:element.updated_at,
                       status:element.experiment_status,
                       key:element.experiment_info_id,
