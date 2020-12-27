@@ -33,6 +33,11 @@ class ExperimentCompare extends Component {
                 key:'dataset_name'
             },
             {
+                title:'Person Correlation Coefficient(train metric)',
+                dataIndex:'PEARSON_CORRELATION_COEFFICIENT_train',
+                key:'PEARSON_CORRELATION_COEFFICIENT_train'
+            },
+            {
                 title: 'Mean Absolute Error(train metric)',
                 dataIndex: 'MEAN_ABSOLUTE_ERROR_train',
                 key:'MEAN_ABSOLUTE_ERROR_train'
@@ -41,11 +46,6 @@ class ExperimentCompare extends Component {
                 title:'Mean Squared Error(train metric)',
                 dataIndex:'MEAN_SQUARED_ERROR_train',
                 key:'MEAN_SQUARED_ERROR_train'
-            },
-            {
-                title:'Person Correlation Coefficient(train metric)',
-                dataIndex:'PEARSON_CORRELATION_COEFFICIENT_train',
-                key:'PEARSON_CORRELATION_COEFFICIENT_train'
             },
             {
                 title:'Person Correlation Coefficient(valid metric)',
@@ -141,6 +141,9 @@ class ExperimentCompare extends Component {
               pointStart: 1
             }
           },
+          tooltip: {
+            valueDecimals: 3
+          },
           series: this.state.compareChartOfdata,
           responsive: {
             rules: [{
@@ -169,12 +172,12 @@ class ExperimentCompare extends Component {
                         key:index,
                         properties:element.experiment_name,
                         dataset_name:element.dataset_name,
-                        MEAN_ABSOLUTE_ERROR_train:element.train_metric.MEAN_ABSOLUTE_ERROR,
-                        MEAN_SQUARED_ERROR_train:element.train_metric.MEAN_SQUARED_ERROR,
-                        PEARSON_CORRELATION_COEFFICIENT_train:element.train_metric.PEARSON_CORRELATION_COEFFICIENT,
-                        MEAN_ABSOLUTE_ERROR_valid:element.valid_metric.MEAN_ABSOLUTE_ERROR,
-                        MEAN_SQUARED_ERROR_valid:element.valid_metric.MEAN_SQUARED_ERROR,
-                        PEARSON_CORRELATION_COEFFICIENT_valid:element.valid_metric.PEARSON_CORRELATION_COEFFICIENT,
+                        MEAN_ABSOLUTE_ERROR_train:element.train_metric.MEAN_ABSOLUTE_ERROR.toFixed(3),
+                        MEAN_SQUARED_ERROR_train:element.train_metric.MEAN_SQUARED_ERROR.toFixed(3),
+                        PEARSON_CORRELATION_COEFFICIENT_train:element.train_metric.PEARSON_CORRELATION_COEFFICIENT.toFixed(3),
+                        MEAN_ABSOLUTE_ERROR_valid:element.valid_metric.MEAN_ABSOLUTE_ERROR.toFixed(3),
+                        MEAN_SQUARED_ERROR_valid:element.valid_metric.MEAN_SQUARED_ERROR.toFixed(3),
+                        PEARSON_CORRELATION_COEFFICIENT_valid:element.valid_metric.PEARSON_CORRELATION_COEFFICIENT.toFixed(3),
                         loss:element.experimental_parameters.loss,
                         epochs:element.experimental_parameters.epochs,
                         metrics:element.experimental_parameters.metrics,

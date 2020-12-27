@@ -97,6 +97,11 @@ export default class ExperimentDetail extends Component {
             }
           }
         },
+        tooltip: {
+          formatter: function() {
+            return '<b>'+ this.point.x.toFixed(3) + ' ' + this.point.y.toFixed(3) +'</b>';
+         }
+        },
         series: this.state.chartOfVsData
       }
       let chartOfCurveOption = {
@@ -129,7 +134,9 @@ export default class ExperimentDetail extends Component {
             pointStart: 1
           }
         },
-  
+        tooltip: {
+          valueDecimals: 3
+        },
         series: this.state.chartOfCurveData,
         responsive: {
           rules: [{
