@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Descriptions, Badge, Empty, Spin } from 'antd';
+import { Descriptions, Badge, Empty, Spin, Collapse } from 'antd';
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { Typography } from 'antd';
 const { Title } = Typography;
+const { Panel } = Collapse;
 
 export default class ExperimentDetail extends Component {
     constructor(props){
@@ -155,7 +156,7 @@ export default class ExperimentDetail extends Component {
           }]
         }
       }
-      console.log(this.state.loadDetailStatus)
+      // console.log(this.state.loadDetailStatus)
 
       let detailsDes = (
           <div id ='empty' style = {{paddingTop:'50px'}}>
@@ -172,7 +173,7 @@ export default class ExperimentDetail extends Component {
           detailsDes = (
             <div>
               <Descriptions 
-                style = {{width:'950px'}}
+                style = {{width:'1000px'}}
                 bordered
                 column={2} 
                 layout="vertical" 
@@ -185,11 +186,26 @@ export default class ExperimentDetail extends Component {
                 </Descriptions.Item>
               </Descriptions>
               <br></br>
-              <p>Model Details:</p>
-              <br></br>
-              <img src = {this.state.detail[0].model_plot_url}
-                  style={{width:'60%'}}></img>
-                  <br></br>
+              <Collapse defaultActiveKey={['1','2','3']} >
+                <Panel header="Model Details" key="1">
+                  <img src = {this.state.detail[0].model_plot_url}
+                    style={{width:'60%'}}></img>
+                </Panel>
+                <Panel header="Learning Curve" key="2">
+                  <HighchartsReact 
+                        highcharts={Highcharts}
+                        options={chartOfCurveOption}
+                        callback={ this.afterChartOfCurveCreated }
+                  />
+                </Panel>
+                <Panel header="Predicted VS True" key="3">
+                  <HighchartsReact 
+                        highcharts={Highcharts}
+                        options={chartVsOption}
+                        callback={ this.afterChartOfVsCreated }
+                  />
+                </Panel>
+              </Collapse>
             </div>
           )
         }
@@ -199,22 +215,7 @@ export default class ExperimentDetail extends Component {
             <div style={{paddingTop:'40px'}}>
                 {detailsDes}
                 <br></br>
-                <div style={{display:this.state.detail.length>0 ? 'block':'none'}}>
-                  <p>Learning Curve:</p>
-                  <div>
-                  <HighchartsReact 
-                      highcharts={Highcharts}
-                      options={chartOfCurveOption}
-                      callback={ this.afterChartOfCurveCreated }
-                  />
-                  </div>
-                  <br></br>
-                  <p>Predicted VS True:</p>
-                  <HighchartsReact 
-                      highcharts={Highcharts}
-                      options={chartVsOption}
-                      callback={ this.afterChartOfVsCreated }
-                  />
+                <div style={{display:this.state.detail.length>0 ? 'block':'none'}}>      
                 </div>
             </div>
           </div>
