@@ -50,14 +50,13 @@ export default class Navigator extends Component {
                         <NavLink to="/datasets/summary" activeStyle = {selectedStyle} >Summary</NavLink>
                     </Menu.Item>  
                     <Menu.Item key="details"><NavLink to="/datasets/details" activeStyle = {selectedStyle}>Details</NavLink></Menu.Item>
-                    <Menu.Item key="createDataset"><NavLink to="/datasets/createDataset" activeStyle = {selectedStyle}>Create DateSets</NavLink></Menu.Item>
+                    <Menu.Item key="createDataset"><NavLink to="/datasets/createDataset" activeStyle = {selectedStyle}>Create</NavLink></Menu.Item>
                 </SubMenu>
                 <SubMenu key="experiment" icon={<FundOutlined />} title="Experiments">
                     <Menu.Item key="experimentsSummary"><NavLink to="/experiment/summary" activeStyle = {selectedStyle}>Summary</NavLink></Menu.Item>
-                    <Menu.Item key="createExperiment"><NavLink to="/experiment/create" activeStyle = {selectedStyle}>Create</NavLink></Menu.Item>
                     <Menu.Item key="experimentsDetail"><NavLink to="/experiment/detail" activeStyle = {selectedStyle}>Details</NavLink></Menu.Item>
                     <Menu.Item key="compareExperiment"><NavLink to="/experiment/compare" activeStyle = {selectedStyle}>Compare</NavLink></Menu.Item>
-
+                    <Menu.Item key="createExperiment"><NavLink to="/experiment/create" activeStyle = {selectedStyle}>Create</NavLink></Menu.Item>
                 </SubMenu>
                 </Menu>
             </Sider>

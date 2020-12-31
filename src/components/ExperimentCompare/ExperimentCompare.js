@@ -196,7 +196,7 @@ class ExperimentCompare extends Component {
             <div>
               <Title level={2}>Comparison of methods experiment</Title>
               <div style={{paddingTop:'40px'}}>
-                 <label className={Style.title}>Summary of experiments: </label>
+                 <label className={Style.title} style={{display:this.state.compareInfo.length>0 ? 'block':'none'}}>Summary of experiments: </label>
                  {compareTable}
                 <br></br>
                 <label className={Style.title} style={{display:this.state.compareInfo.length>0 ? 'block':'none'}}>Observation Chart:</label>
