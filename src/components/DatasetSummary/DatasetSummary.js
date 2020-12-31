@@ -26,7 +26,7 @@ export default class Summary extends Component {
         dataIndex: 'name',
         key: 'name',
         width: '30%',
-        ...this.getColumnSearchProps('name'),
+        ...this.getColumnSearchProps('names'),
       },
       {
         title: 'Number of samples',
@@ -84,18 +84,20 @@ export default class Summary extends Component {
     },
     render: text =>
       this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ''}
-        />
+        text
+        // <Highlighter
+        //   highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+        //   searchWords={[this.state.searchText]}
+        //   autoEscape
+        //   textToHighlight={text ? text.toString() : ''}
+        // />
       ) : (
           text
         ),
   });
 
   handleSearch = (selectedKeys, confirm, dataIndex) => {
+    console.log(dataIndex)
     confirm();
     this.setState({
       searchText: selectedKeys[0],
@@ -133,6 +135,7 @@ export default class Summary extends Component {
           name: <a onClick={() => { this.showDetails(index, element.dataset_info_id) }}><Link to="/datasets/details">{element.dataset_name}</Link></a>,
           NumberOfSamples: element.num_samples,
           date: report_time,
+          names:element.dataset_name,
         }
       )
     })

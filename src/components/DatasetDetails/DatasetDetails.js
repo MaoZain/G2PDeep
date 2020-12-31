@@ -25,6 +25,7 @@ export default class Details extends Component {
             }
             this.time = setTimeout(() => {
                 if (typeof value == "number" && value <= 1 && value >= 0) {
+                    console.log("modify")
                     this.setState({
                         persent_train: Number(value),
                     })
@@ -44,23 +45,24 @@ export default class Details extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         // console.log(nextProps.datasetsInfo)
-        if (nextProps.datasetsInfo.length > 0) {
+        // if (nextProps.datasetsInfo.length > 0) {
             this.setState({
                 datasetsInfo: nextProps.datasetsInfo,
                 showIndex: nextProps.showIndex,
                 showDetails_id: nextProps.showDetails_id,
                 persent_train: nextProps.datasetsInfo[nextProps.showIndex].ratio_training_dataset,
             })
-        } else {
-            this.setState({
-                datasetsInfo: nextProps.datasetsInfo,
-            })
-        }
+        // } else {
+        //     this.setState({
+        //         datasetsInfo: nextProps.datasetsInfo,
+        //     })
+        // }
 
     }
 
+
     render() {
-        // console.log(this.state.datasetsInfo)
+        // console.log(this.state.persent_train)
         var detailsDes = (
             <div id='empty' style={{ paddingTop: '50px' }}>
                 <Empty />
@@ -76,7 +78,7 @@ export default class Details extends Component {
             let created_time = date.toLocaleString('en-US',);
             // console.log(this.state.persent_train)
             detailsDes = (
-                <div>
+                <div key = {showIndex}>
                     <Descriptions
                         style={{ width: '850px' }}
                         bordered
@@ -101,10 +103,11 @@ export default class Details extends Component {
                             {Math.round(this.state.datasetsInfo[showIndex].num_samples * this.state.persent_train)}
                         </Descriptions.Item>
                         <Descriptions.Item label="Percentage of training dataset">
-                            <InputNumber onChange={this.onChangeTrain}
+                            <InputNumber 
+                                onChange={this.onChangeTrain}
                                 className={Style.editInput}
-                                min={0} max={1} step={0.01} precision={2}
-                                defaultValue={this.state.persent_train} />
+                                min={0} max={1} step={0.01}
+                                defaultValue = {this.state.persent_train} />
                         </Descriptions.Item>
                         <Descriptions.Item label="Number of validation">
                             {Math.round(this.state.datasetsInfo[showIndex].num_samples * percent_valid)}

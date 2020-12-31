@@ -12,7 +12,7 @@ export default class Datasets extends Component {
             // currentPage:'summary',
             datasetsInfo:[],
             showDetails_index:0,
-            showDetails_id:null,
+            showDetails_id:0,
         }
     }
 
@@ -30,7 +30,7 @@ export default class Datasets extends Component {
     // }
 
     showDetails = (index, datasetId) => {
-        // console.log(index);
+        // console.log(datasetId);
         this.setState({
             showDetails_index:index,
             showDetails_id:datasetId,
@@ -39,11 +39,12 @@ export default class Datasets extends Component {
     }
 
     updateDetail = (index, percent_train, percent_valid) => {
+        // console.log(index)
         this.fetchUpdateDetail(index, percent_train, percent_valid)
     }
 
     fetchUpdateDetail = (index, percent_train, percent_valid) => {
-        // console.log(index)
+        // console.log(this.state.showDetails_id)
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         var raw = JSON.stringify(
@@ -66,7 +67,7 @@ export default class Datasets extends Component {
     }
 
     checkUpdate = (result) => {
-        console.log(result)
+        // console.log(result)
         let status = JSON.parse(result).status;
         if (status === "SUCCESS") {
             message.success("success to update !")
@@ -101,7 +102,7 @@ export default class Datasets extends Component {
     }
 
     render() {
-        // console.log(this.props.history)
+        
         return (
             <div id = 'datasets'>
                 <div id = 'summary'

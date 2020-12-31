@@ -11,7 +11,7 @@ class Expriments extends Component {
         super(props);
         this.state = {
             experimentInfo: [],
-            showDetails_index:0,
+            showDetails_index:null,
             showDetails_id:null,
             detail:[],
             chartOfVsData:[],
@@ -136,6 +136,7 @@ class Expriments extends Component {
     }
 
     render() {
+        console.log(this.state.showDetails_index)
         return (
             <div id = 'experiment'>
                 <div id = 'exSummary'

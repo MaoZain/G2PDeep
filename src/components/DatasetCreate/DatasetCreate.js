@@ -12,8 +12,8 @@ const { TextArea } = Input;
 
 
 class DatasetCreate extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       loading: false,
       datasetName: '',
@@ -21,6 +21,7 @@ class DatasetCreate extends Component {
       dataTrainUrl: '',
       description: '',
       urlExample: '',
+      keyOfInputUrl:0,
     };
     this.ref_example_data_text = React.createRef();
   }
@@ -40,7 +41,8 @@ class DatasetCreate extends Component {
 
   onChangeDataUrl = ({ target: { value } }) => {
     this.setState({
-      dataTrainUrl: value
+      dataTrainUrl: value,
+      keyOfInputUrl:this.state.keyOfInputUrl+1
     })
   };
 
@@ -104,9 +106,10 @@ class DatasetCreate extends Component {
 
   addExampleUrl = () => {
     var url = "https://de.cyverse.org/dl/d/2FFA3458-2DDF-4FCB-B1FE-DF5C08A0BD28/protein.train.csv";
-    this.ref_example_data_text.current.value = url
+    // this.ref_example_data_text.current.value = url
     this.setState({
-      dataTrainUrl: url
+      dataTrainUrl: url,
+      keyOfInputUrl:this.state.keyOfInputUrl+1,
     })
   };
 
@@ -152,16 +155,22 @@ class DatasetCreate extends Component {
       <div id='dataUrl' style={{ paddingTop: '30px' }}>
         <label className={Style.title}>
           Link to training and validation dataset<span style={{ color: 'red' }}>*</span> :
-                    <a className={Style.a_example} onClick={this.addExampleUrl} >Example</a>
+          <a className={Style.a_example} onClick={this.addExampleUrl} >Example</a>
         </label>
         <br></br>
-        <Text
+        {/* <Text
           // allowClear
           field="example_url"
           onChange={this.onChangeDataUrl}
           ref={this.ref_example_data_text}
           className={Style.dataUrl}
-        />
+        /> */}
+        <Input placeholder="input your dataset's name"
+          key={this.state.keyOfInputUrl}
+          defaultValue={this.state.dataTrainUrl}
+          allowClear
+          onChange={this.onChangeDatasetName}
+          className={Style.dataUrl} />
       </div>
     );
     let Description = (

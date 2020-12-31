@@ -7,7 +7,11 @@ const { SubMenu } = Menu;
 const { Sider } = Layout;
 
 const selectedStyle = {
+    display:'inline-block',
     color:'rgb(24, 144, 255)',
+    backgroundColor:'rgb(24 144 255 / 19%)',
+    width:'252px',
+    borderRight:'3px rgb(24, 144, 255) solid'
 }
 
 export default class Navigator extends Component {
@@ -42,7 +46,9 @@ export default class Navigator extends Component {
                 >
                 <Menu.Item key="prediction" icon={<LaptopOutlined />}><NavLink to="/prediction" activeStyle = {selectedStyle}>Predition</NavLink></Menu.Item>
                 <SubMenu key="datasets" icon={<CloudOutlined />} title="DateSets">
-                    <Menu.Item key="summary"><NavLink to="/datasets/summary" activeStyle = {selectedStyle} >Summary</NavLink></Menu.Item>
+                    <Menu.Item key="summary">
+                        <NavLink to="/datasets/summary" activeStyle = {selectedStyle} >Summary</NavLink>
+                    </Menu.Item>  
                     <Menu.Item key="details"><NavLink to="/datasets/details" activeStyle = {selectedStyle}>Details</NavLink></Menu.Item>
                     <Menu.Item key="createDataset"><NavLink to="/datasets/createDataset" activeStyle = {selectedStyle}>Create DateSets</NavLink></Menu.Item>
                 </SubMenu>
