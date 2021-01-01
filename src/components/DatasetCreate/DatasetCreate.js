@@ -81,14 +81,14 @@ class DatasetCreate extends Component {
     console.log(result)
     let status = JSON.parse(result).status;
     if (status === 'SUCCESS') {
-      this.setState({
-        loading: false,
-      })
       this.props.fetchDatasetInfo();
       this.props.history.push("/datasets/summary");
     } else {
       message.warning(JSON.parse(result).message)
     }
+    this.setState({
+      loading: false,
+    })
   }
 
   create = () => {

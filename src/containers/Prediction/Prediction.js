@@ -40,11 +40,13 @@ export default class Prediction extends Component {
             let res = JSON.parse(result).message;
             this.setState({
                 result:res,
-                loading:false,
             })
         }else{
             message.warning('predict failed !')
         }
+        this.setState({
+            loading:false,
+        })
     }
 
     render() {

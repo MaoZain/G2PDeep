@@ -157,10 +157,10 @@ class ExperimentCreate extends Component {
         if (status === 'SUCCESS' || status === 'RUNNING' || status === 'PEDNING') {
             this.props.fetchExperimentInfo();
             this.props.history.push("/experiment/summary");
-            this.setState({ loading: false })
         } else {
             message.warning(JSON.parse(result).message)
         }
+        this.setState({ loading: false })
     }
 
     onChangeExperimentName = ({ target: { value } }) => {

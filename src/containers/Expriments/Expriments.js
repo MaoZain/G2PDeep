@@ -124,13 +124,13 @@ class Expriments extends Component {
         if (status === 'SUCCESS') {
             this.setState({
                 compareInfo:compareInfo,
-                loading:false,
             })
             this.props.history.push("/experiment/compare");
         } else {
             message.warning(JSON.parse(compareJson).message)
         }
         this.setState({
+            loading:false,
             compareChartOfdata:learning_curve_series_data
         })
     }

@@ -45,14 +45,15 @@ export default class Details extends Component {
 
     componentWillReceiveProps = (nextProps) => {
         // console.log(nextProps.datasetsInfo)
-        // if (nextProps.datasetsInfo.length > 0) {
+        if (nextProps.datasetsInfo.length > 0) {
             this.setState({
                 datasetsInfo: nextProps.datasetsInfo,
                 showIndex: nextProps.showIndex,
                 showDetails_id: nextProps.showDetails_id,
                 persent_train: nextProps.datasetsInfo[nextProps.showIndex].ratio_training_dataset,
             })
-        // } else {
+        }
+        //  else {
         //     this.setState({
         //         datasetsInfo: nextProps.datasetsInfo,
         //     })
