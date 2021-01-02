@@ -45,8 +45,7 @@ export default class Navigator extends Component {
                 selectedKeys = {['onther']}
                 >
                 <Menu.Item key="introduction" icon={<BulbOutlined />}><NavLink to="/introduction" activeStyle = {selectedStyle}>Introduction</NavLink></Menu.Item>
-                <Menu.Item key="prediction" icon={<LaptopOutlined />}><NavLink to="/prediction" activeStyle = {selectedStyle}>Predition</NavLink></Menu.Item>
-                <SubMenu key="datasets" icon={<CloudOutlined />} title="DateSets">
+                <SubMenu key="datasets" icon={<CloudOutlined />} title="Datesets">
                     <Menu.Item key="summary">
                         <NavLink to="/datasets/summary" activeStyle = {selectedStyle} >Summary</NavLink>
                     </Menu.Item>  
@@ -59,6 +58,7 @@ export default class Navigator extends Component {
                     <Menu.Item key="compareExperiment"><NavLink to="/experiment/compare" activeStyle = {selectedStyle}>Compare</NavLink></Menu.Item>
                     <Menu.Item key="createExperiment"><NavLink to="/experiment/create" activeStyle = {selectedStyle}>Create</NavLink></Menu.Item>
                 </SubMenu>
+                <Menu.Item key="prediction" icon={<LaptopOutlined />}><NavLink to="/prediction" activeStyle = {selectedStyle}>Predition & discovery</NavLink></Menu.Item>
                 </Menu>
             </Sider>
         )

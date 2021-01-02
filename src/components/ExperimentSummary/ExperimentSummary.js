@@ -1,7 +1,13 @@
 import React, { Component } from 'react'
-import { Table, Button, message } from 'antd';
+import { Table, Tag, Button, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { Typography } from 'antd';
+import {
+    CheckCircleOutlined,
+    SyncOutlined,
+    CloseCircleOutlined,
+} from '@ant-design/icons';
+
 const { Title } = Typography;
 
 export default class ExperimentSummary extends Component {
@@ -20,6 +26,32 @@ export default class ExperimentSummary extends Component {
             {
                 title: 'Status',
                 dataIndex: 'status',
+                render: (status) => {
+                    let color = '';
+                    let tag_str = '';
+                    if (status == 'PENDING' || status == 'RUNNING') {
+                        tag_str = (
+                            <Tag icon={<SyncOutlined spin />} color="processing">
+                                {status}
+                            </Tag>);
+                    }
+                    else if (status == 'SUCCESS') {
+                        tag_str = (
+                            <Tag icon={<CheckCircleOutlined />} color="success">
+                                {status}
+                            </Tag>
+                        );
+                    }
+                    else {
+                        tag_str = (
+                            <Tag icon={<CloseCircleOutlined />} color="error">
+                                {status}
+                            </Tag>
+                        );
+                    }
+
+                    return tag_str;
+                },
             },
             {
                 title: 'Created Date',
@@ -110,7 +142,7 @@ export default class ExperimentSummary extends Component {
         return (
             <div>
                 <Title level={2}>Summary of experiments</Title>
-                <div id='experiment_summary_content' style={{ width: '850px', paddingTop:'40px' }}>
+                <div id='experiment_summary_content' style={{ width: '850px', paddingTop: '40px' }}>
                     <div style={{ marginBottom: 16 }}>
                         <Button type="primary" onClick={this.compare} loading={loading}>
                             Compare
