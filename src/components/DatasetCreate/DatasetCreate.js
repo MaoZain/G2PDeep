@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import Style from './datasetCreate.module.css'
 // import { Select } from 'antd';
-import { Input, Button, message } from 'antd';
+import { Input, Button, message, Drawer } from 'antd';
 import { withRouter } from 'react-router-dom'
 import { Text } from "informed";
 import { Typography } from 'antd';
+import dataset_example_img from './dataset_example.png'
 const { Title } = Typography;
 
 // const { Option } = Select;
@@ -21,7 +22,8 @@ class DatasetCreate extends Component {
       dataTrainUrl: '',
       description: '',
       urlExample: '',
-      keyOfInputUrl:0,
+      keyOfInputUrl: 0,
+      drawer_visible: false,
     };
     this.ref_example_data_text = React.createRef();
   }
@@ -42,7 +44,7 @@ class DatasetCreate extends Component {
   onChangeDataUrl = ({ target: { value } }) => {
     this.setState({
       dataTrainUrl: value,
-      keyOfInputUrl:this.state.keyOfInputUrl+1
+      keyOfInputUrl: this.state.keyOfInputUrl + 1
     })
   };
 
@@ -109,7 +111,7 @@ class DatasetCreate extends Component {
     // this.ref_example_data_text.current.value = url
     this.setState({
       dataTrainUrl: url,
-      keyOfInputUrl:this.state.keyOfInputUrl+1,
+      keyOfInputUrl: this.state.keyOfInputUrl + 1,
     })
   };
 
@@ -119,6 +121,19 @@ class DatasetCreate extends Component {
       urlExample: 'asdfasdfafd'
     })
   }
+
+  // drawer
+  showDrawer = () => {
+    this.setState({
+      drawer_visible: true
+    })
+    console.log(this.state.drawer_visible);
+  };
+  onDrawerClose = () => {
+    this.setState({
+      drawer_visible: false
+    })
+  };
 
   render() {
     // console.log(this.context)
@@ -151,11 +166,37 @@ class DatasetCreate extends Component {
     //     </Select>
     //   </div>
     // );
+    let drawer_data_format = (
+      <Drawer
+        title="Data type & data format"
+        width={'50%'}
+        placement="right"
+        closable={false}
+        onClose={this.onDrawerClose}
+        visible={this.state.drawer_visible}
+        // visible={"true"}
+      >
+        <p>Followings are restrictions to create a dataset:
+          <ul>
+            <li>1. A valid link to data.</li>
+            <li>2. The data must be a comma-separated values (CSV) file.</li>
+            <li>3. Features (SNPs) in the file must be coded as -1, 0, 1, or 2 to represent missing genotypes, homozygous, heterozygous, and reference homozygous, respectively.</li>
+            <li>4. Header of label (quantitative traits) column in the file must be indicated by a word "label".</li>
+          </ul>
+        </p>
+        <p>
+          Following is an axample of valid data:
+            <img src={dataset_example_img} style={{ width: '80%' }}></img>
+        </p>
+      </Drawer>
+    );
+
     let dataUrl = (
       <div id='dataUrl' style={{ paddingTop: '30px' }}>
         <label className={Style.title}>
           Link to training and validation dataset<span style={{ color: 'red' }}>*</span> :
-          <a className={Style.a_example} onClick={this.addExampleUrl} >Example</a>
+          <a className={Style.a_example} onClick={this.addExampleUrl} >Link to example</a>,
+          <a className={Style.a_example} onClick={this.showDrawer}>Show data format</a>
         </label>
         <br></br>
         {/* <Text
@@ -200,6 +241,7 @@ class DatasetCreate extends Component {
               loading={this.state.loading}
             >Create</Button>
           </div>
+          {drawer_data_format}
         </div>
       </div>
     )
