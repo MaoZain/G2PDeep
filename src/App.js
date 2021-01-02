@@ -5,6 +5,7 @@ import {Route} from 'react-router-dom';
 import Navigator from './components/Navigator/Navigator';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer'
+import Introduction from './containers/Introduction/Introduction';
 import Prediction from './containers/Prediction/Prediction';
 import Datasets from './containers/Datasets/Datasets';
 import Expriments from './containers/Expriments/Expriments';
@@ -41,7 +42,8 @@ class App extends React.PureComponent {
           <Layout>
             <Content className={Style.content}>
               <div>
-                  <Route exact path="/" component={Prediction}/>
+                  <Route exact path="/" component={Introduction}/>
+                  <Route path="/introduction" component={Introduction}/>
                   <Route path="/prediction" component={Prediction}/>
                   <Route path="/datasets/:menu" component={Datasets}/>
                   <Route path="/experiment/:menu" component={Expriments}/>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Style from "./navigator.module.css";
 import { Layout, Menu } from 'antd';
-import { LaptopOutlined, FundOutlined, CloudOutlined } from '@ant-design/icons';
+import { BulbOutlined, LaptopOutlined, FundOutlined, CloudOutlined } from '@ant-design/icons';
 import { Link, NavLink } from 'react-router-dom';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
@@ -44,6 +44,7 @@ export default class Navigator extends Component {
                 className={Style.menu}
                 selectedKeys = {['onther']}
                 >
+                <Menu.Item key="introduction" icon={<BulbOutlined />}><NavLink to="/introduction" activeStyle = {selectedStyle}>Introduction</NavLink></Menu.Item>
                 <Menu.Item key="prediction" icon={<LaptopOutlined />}><NavLink to="/prediction" activeStyle = {selectedStyle}>Predition</NavLink></Menu.Item>
                 <SubMenu key="datasets" icon={<CloudOutlined />} title="DateSets">
                     <Menu.Item key="summary">
