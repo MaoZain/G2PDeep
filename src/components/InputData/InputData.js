@@ -96,7 +96,7 @@ export default class InputData extends Component {
             inputData: result,
             keyOfSNPExampleData: this.state.keyOfSNPExampleData + 1,
         })
-        console.log(this.state);
+        // console.log(this.state);
     };
 
     submit = () => {
