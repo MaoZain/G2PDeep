@@ -142,6 +142,7 @@ export default class InputData extends Component {
                 onChange={this.onChangeInputData}
                 placeholder="Iinput your data"
                 rows={6}
+                wrap="off"
                 />
             </div>
         )
