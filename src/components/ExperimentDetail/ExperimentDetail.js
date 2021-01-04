@@ -130,11 +130,11 @@ export default class ExperimentDetail extends Component {
           text: 'Epochs'
         }
       },
-      legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle'
-      },
+      // legend: {
+      //   layout: 'vertical',
+      //   align: 'right',
+      //   verticalAlign: 'middle'
+      // },
       plotOptions: {
         series: {
           label: {
