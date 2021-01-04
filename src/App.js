@@ -6,6 +6,7 @@ import Navigator from './components/Navigator/Navigator';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer'
 import Introduction from './containers/Introduction/Introduction';
+import UserManual from './containers/UserManual/UserManual';
 import Prediction from './containers/Prediction/Prediction';
 import Datasets from './containers/Datasets/Datasets';
 import Expriments from './containers/Expriments/Expriments';
@@ -47,6 +48,7 @@ class App extends React.PureComponent {
                   <Route path="/prediction" component={Prediction}/>
                   <Route path="/datasets/:menu" component={Datasets}/>
                   <Route path="/experiment/:menu" component={Expriments}/>
+                  <Route path="/user_manual" component={UserManual}/>
               </div>
             </Content>
           </Layout>
