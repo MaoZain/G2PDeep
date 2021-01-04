@@ -210,7 +210,7 @@ class DatasetCreate extends Component {
           key={this.state.keyOfInputUrl}
           defaultValue={this.state.dataTrainUrl}
           allowClear
-          onChange={this.onChangeDatasetName}
+          onChange={this.onChangeDataUrl}
           className={Style.dataUrl} />
       </div>
     );

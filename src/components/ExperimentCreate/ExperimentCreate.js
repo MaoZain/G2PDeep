@@ -457,7 +457,7 @@ class ExperimentCreate extends Component {
                             <Slider
                                 name='left_filters[]'
                                 style={{ color: '#1165f1', width: '100px' }}
-                                defaultValue={5}
+                                defaultValue={10}
                                 //   getAriaValueText={valuetext}
                                 aria-labelledby="discrete-slider-small-steps"
                                 min={3} max={12} step={1}
@@ -466,7 +466,7 @@ class ExperimentCreate extends Component {
                             <Slider
                                 name='left_kernel_size[]'
                                 style={{ color: 'rgba(239, 28, 65, 0.97)', width: '100px', marginLeft: '30px' }}
-                                defaultValue={10}
+                                defaultValue={4}
                                 //   getAriaValueText={valuetext}
                                 aria-labelledby="discrete-slider-small-steps"
                                 min={4} max={30} step={1}
@@ -505,7 +505,7 @@ class ExperimentCreate extends Component {
                             <Slider
                                 name='right_filters[]'
                                 style={{ color: '#1165f1', width: '100px', marginLeft: '45px' }}
-                                defaultValue={5}
+                                defaultValue={10}
                                 aria-labelledby="discrete-slider-small-steps"
                                 min={3} max={12} step={1}
                                 valueLabelDisplay="on"
@@ -513,7 +513,7 @@ class ExperimentCreate extends Component {
                             <Slider
                                 name='right_kernel_size[]'
                                 style={{ color: 'rgba(239, 28, 65, 0.97)', width: '100px', marginLeft: '30px' }}
-                                defaultValue={10}
+                                defaultValue={4}
                                 //   getAriaValueText={valuetext}
                                 aria-labelledby="discrete-slider-small-steps"
                                 min={4} max={30} step={1}
