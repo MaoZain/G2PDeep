@@ -167,7 +167,7 @@ export default class InputData extends Component {
         <div>
 
           <Title level={3}>Quick start</Title>
-          <div style={{ width: '850px' }}>
+          <div style={{ width: '950px' }}>
             <Row>
               <Col>
                 {step_comp}
