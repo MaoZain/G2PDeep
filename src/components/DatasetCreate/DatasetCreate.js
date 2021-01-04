@@ -206,7 +206,7 @@ class DatasetCreate extends Component {
           ref={this.ref_example_data_text}
           className={Style.dataUrl}
         /> */}
-        <Input placeholder="input your dataset's name"
+        <Input placeholder="input a link to your data"
           key={this.state.keyOfInputUrl}
           defaultValue={this.state.dataTrainUrl}
           allowClear

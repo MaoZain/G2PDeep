@@ -10,21 +10,22 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 export default class InputData extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
-            dataType:'snp',
-            model:'',
-            inputData:'',
-            SNPsInfo:'',
-            experimentInfo:[],
-            loading:props.loading,
+            dataType: 'snp',
+            model: '',
+            inputData: '',
+            SNPsInfo: '',
+            experimentInfo: [],
+            loading: props.loading,
+            keyOfSNPExampleData: 0,
         };
     }
 
     componentWillReceiveProps = (nextProps) => {
         this.setState({
-            loading:nextProps.loading
+            loading: nextProps.loading
         })
     }
 
@@ -36,11 +37,11 @@ export default class InputData extends Component {
         var requestOptions = {
             method: 'GET',
             redirect: 'follow'
-          };
+        };
         fetch(`/api/operation/retrieve_experiment_summary/?localstorage_id=${localStorage.getItem('G2PDeep')}`, requestOptions)
-        .then(response => response.text())
-        .then(result => this.getExperimentInfo(result))
-        .catch(error => console.log('error', error));
+            .then(response => response.text())
+            .then(result => this.getExperimentInfo(result))
+            .catch(error => console.log('error', error));
     }
 
     getExperimentInfo = (result) => {
@@ -50,39 +51,60 @@ export default class InputData extends Component {
             experimentInfo: info,
         })
     }
-    
-    onChangeDataType = (value) =>{
+
+    onChangeDataType = (value) => {
         console.log(`selected ${value}`);
         this.setState({
-            dataType:value,
+            dataType: value,
         })
     }
 
-    onChangeModel = (value) =>{
+    onChangeModel = (value) => {
         console.log(`selected ${value}`);
         this.setState({
-            model:value,
+            model: value,
         })
     }
 
     onChangeInputData = ({ target: { value } }) => {
         this.setState({
-            inputData:value
+            inputData: value
         })
     };
 
     onChangeSNPsInfo = ({ target: { value } }) => {
         this.setState({
-            SNPsInfo:value
+            SNPsInfo: value
         })
     };
 
+    fetchExampleSNPdata = () => {
+        var url = "https://de.cyverse.org/dl/d/8F6ECCAE-CABF-44BA-B39A-E77B0FAA623B/test_data.txt";
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+          };
+        
+        fetch(url, requestOptions)
+        .then(response => response.text())
+        .then(result => this.addExampleSNPData(result))
+        .catch(error => console.log('error', error));
+    }
+
+    addExampleSNPData = (result) => {
+        this.setState({
+            inputData: result,
+            keyOfSNPExampleData: this.state.keyOfSNPExampleData + 1,
+        })
+        console.log(this.state);
+    };
+
     submit = () => {
-        if (this.state.inputData!='' && this.state.medel!='') {
+        if (this.state.inputData != '' && this.state.medel != '') {
             this.props.submit(this.state.dataType, this.state.model, this.state.inputData)
-        }else{
+        } else {
             message.warning("Invalid Input")
-        } 
+        }
     };
 
     render() {
@@ -98,7 +120,7 @@ export default class InputData extends Component {
                     optionFilterProp="children"
                     onChange={this.onChangeDataType}
                     filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
                 >
                     <Option value="jacDNA Mathylationk">DNA Mathylation</Option>
@@ -107,8 +129,8 @@ export default class InputData extends Component {
             </div>
         )
         let model = (
-            <div style={{paddingTop:'30px'}}>
-                <label className={Style.title}>Model<span style={{color:'red'}}>*</span>:</label>
+            <div style={{ paddingTop: '30px' }}>
+                <label className={Style.title}>Model<span style={{ color: 'red' }}>*</span>:</label>
                 <br></br>
                 <Select
                     className={Style.selectModel}
@@ -117,7 +139,7 @@ export default class InputData extends Component {
                     optionFilterProp="children"
                     onChange={this.onChangeModel}
                     filterOption={(input, option) =>
-                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
                 >
                     {
@@ -130,32 +152,35 @@ export default class InputData extends Component {
             </div>
         )
 
-        let inputData=(
-            <div style={{clear:'both',paddingTop:'30px'}}>
+        let inputData = (
+            <div style={{ clear: 'both', paddingTop: '30px' }}>
                 <div className={Style.title}>
-                    <label >Input Data<span style={{color:'red'}}>*</span> :</label>
-                    <a href = '###' className = {Style.inputData_a} >example</a>
+                    <label >Input Data<span style={{ color: 'red' }}>*</span> :</label>
+                    <a className={Style.inputData_a} onClick={this.fetchExampleSNPdata}>Load an example</a>
                     {/* <a href = '###' className = {Style.inputData_a} >upload</a> */}
                 </div>
                 <TextArea
-                className={Style.inputData}
-                onChange={this.onChangeInputData}
-                placeholder="Iinput your data"
-                rows={6}
-                wrap="off"
+                    key={this.state.keyOfSNPExampleData}
+                    defaultValue={this.state.inputData}
+                    className={Style.inputData}
+                    onChange={this.onChangeInputData}
+                    placeholder="Input your data"
+                    rows={6}
+                    wrap="off"
+                    allowClear
                 />
             </div>
         )
-        let SNPsInfo=(
-            <div style={{clear:'both',paddingTop:'30px'}}>
+        let SNPsInfo = (
+            <div style={{ clear: 'both', paddingTop: '30px' }}>
                 <div className={Style.title}>
                     <label >Additional SNPs Information :</label>
                 </div>
                 <TextArea
-                className={Style.inputData}
-                onChange={this.onChangeSNPsInfo}
-                placeholder="Iinput your SNPsInfo"
-                rows={6}
+                    className={Style.inputData}
+                    onChange={this.onChangeSNPsInfo}
+                    placeholder="Iinput your SNPsInfo"
+                    rows={6}
                 />
             </div>
         )
@@ -166,11 +191,11 @@ export default class InputData extends Component {
                 {model}
                 {inputData}
                 {/* {SNPsInfo} */}
-                <div style={{paddingTop:'40px'}}>
-                    <Button type="primary" size={'large'} 
-                       onClick = {this.submit}
-                       loading = {this.state.loading}
-                       >Submit</Button>
+                <div style={{ paddingTop: '40px' }}>
+                    <Button type="primary" size={'large'}
+                        onClick={this.submit}
+                        loading={this.state.loading}
+                    >Submit</Button>
                 </div>
             </div>
         )
