@@ -113,7 +113,7 @@ class DatasetCreate extends Component {
       url = "https://de.cyverse.org/dl/d/2FFA3458-2DDF-4FCB-B1FE-DF5C08A0BD28/protein.train.csv"
     }
     else if(this.state.dataType == "SNP") {
-      url = "https://de.cyverse.org/dl/d/2FFA3458-2DDF-4FCB-B1FE-DF5C08A0BD28/protein.SNP.csv"
+      url = "https://de.cyverse.org/dl/d/3AB7C76F-F1C5-4C55-A6CA-0E2D77A8EEB4/scn_example.csv"
     }
 
     this.setState({
