@@ -88,10 +88,10 @@ export default class Details extends Component {
                         <Descriptions.Item label="Dataset Name" span={2}>
                             {this.state.datasetsInfo[showIndex].dataset_name}
                         </Descriptions.Item>
-                        <Descriptions.Item label="Data Type">
-                            SNPs
+                        <Descriptions.Item label="Data Type" span={2}>
+                            {this.state.datasetsInfo[showIndex].dataset_type_name}
                         </Descriptions.Item>
-                        <Descriptions.Item label="Created time" style={{ width: '250px' }}>
+                        <Descriptions.Item label="Created time" span={2} style={{ width: '250px' }}>
                             {created_time}
                         </Descriptions.Item>
                         <Descriptions.Item label="Number of samples">

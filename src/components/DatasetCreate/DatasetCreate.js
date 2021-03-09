@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react'
 import Style from './datasetCreate.module.css'
-// import { Select } from 'antd';
+import { Select } from 'antd';
 import { Input, Button, message, Drawer } from 'antd';
 import { withRouter } from 'react-router-dom'
 import { Text } from "informed";
@@ -8,7 +8,7 @@ import { Typography } from 'antd';
 import dataset_example_img from './dataset_example.png'
 const { Title } = Typography;
 
-// const { Option } = Select;
+const { Option } = Select;
 const { TextArea } = Input;
 
 
@@ -62,7 +62,7 @@ class DatasetCreate extends Component {
     let raw = JSON.stringify({
       "localstorage_id": localStorage.getItem('G2PDeep'),
       "dataset_name": this.state.datasetName,
-      "dataset_type_key": 'snp',
+      "dataset_type_key": this.state.dataType,
       "training_dataset_url": this.state.dataTrainUrl,
       "description": this.state.description,
       "test_dataset_url": ''
@@ -107,20 +107,20 @@ class DatasetCreate extends Component {
   };
 
   addExampleUrl = () => {
-    var url = "https://de.cyverse.org/dl/d/2FFA3458-2DDF-4FCB-B1FE-DF5C08A0BD28/protein.train.csv";
-    // this.ref_example_data_text.current.value = url
+    // set URL
+    var url = ""
+    if ( this.state.dataType == "ZYGOSITY") {
+      url = "https://de.cyverse.org/dl/d/2FFA3458-2DDF-4FCB-B1FE-DF5C08A0BD28/protein.train.csv"
+    }
+    else if(this.state.dataType == "SNP") {
+      url = "https://de.cyverse.org/dl/d/2FFA3458-2DDF-4FCB-B1FE-DF5C08A0BD28/protein.SNP.csv"
+    }
+
     this.setState({
       dataTrainUrl: url,
       keyOfInputUrl: this.state.keyOfInputUrl + 1,
     })
   };
-
-
-  urlExample = () => {
-    this.setState({
-      urlExample: 'asdfasdfafd'
-    })
-  }
 
   // drawer
   showDrawer = () => {
@@ -147,25 +147,25 @@ class DatasetCreate extends Component {
           className={Style.inputDatasetName} />
       </div>
     )
-    // let dataType = (
-    //   <div id='dataType' style={{ paddingTop: '30px' }}>
-    //     <label className={Style.title}>Data Type <span style={{ color: 'red' }}>*</span>:</label>
-    //     <br></br>
-    //     <Select
-    //       className={Style.dataType}
-    //       showSearch
-    //       placeholder="Select a Model"
-    //       optionFilterProp="children"
-    //       onChange={this.onChangeDataType}
-    //       filterOption={(input, option) =>
-    //         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-    //       }
-    //     >
-    //       <Option value="jacDNA Mathylationk">DNA Mathylation</Option>
-    //       <Option value="snp">SNPs</Option>
-    //     </Select>
-    //   </div>
-    // );
+    let dataType = (
+      <div id='dataType' style={{ paddingTop: '30px' }}>
+        <label className={Style.title}>Data Type <span style={{ color: 'red' }}>*</span>:</label>
+        <br></br>
+        <Select
+          className={Style.dataType}
+          showSearch
+          placeholder="Select a Model"
+          optionFilterProp="children"
+          onChange={this.onChangeDataType}
+          filterOption={(input, option) =>
+            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          <Option value="ZYGOSITY">Zygosity - homozygous, heterozygous, and reference homozygous</Option>
+          <Option value="SNP">SNP - adenine (A), thymine (T), cytosine (C) and guanine (G)</Option>
+        </Select>
+      </div>
+    );
     let drawer_data_format = (
       <Drawer
         title="Data type & data format"
@@ -232,7 +232,7 @@ class DatasetCreate extends Component {
         <Title level={2}>Creating dataset</Title>
         <div style={{ paddingTop: '40px' }}>
           {datasetName}
-          {/* {dataType} */}
+          {dataType}
           {dataUrl}
           {Description}
           <div style={{ paddingTop: '40px' }}>
