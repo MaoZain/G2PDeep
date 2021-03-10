@@ -1,16 +1,39 @@
 import React, { Component, useState } from 'react'
 import Style from './datasetCreate.module.css'
 import { Select } from 'antd';
-import { Input, Button, message, Drawer } from 'antd';
+import { Input, Button, message, Drawer, Upload } from 'antd';
 import { withRouter } from 'react-router-dom'
 import { Text } from "informed";
 import { Typography } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import dataset_example_img from './dataset_example.png'
 const { Title } = Typography;
 
 const { Option } = Select;
 const { TextArea } = Input;
 
+// TODO(ziting): change following code if you like.
+var _SERVER_UPLOAD_FILE_NAME = '';
+const props = {
+  name: 'dataset_file',
+  action: '/api/datasets/upload_dataset_file/',
+  accept:".csv",
+  headers: {
+    authorization: 'authorization-text',
+  },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+      _SERVER_UPLOAD_FILE_NAME = info.file.response.message;
+      // console.log(_SERVER_UPLOAD_FILE_NAME); 
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+};
 
 class DatasetCreate extends Component {
   constructor(props) {
@@ -64,6 +87,7 @@ class DatasetCreate extends Component {
       "dataset_name": this.state.datasetName,
       "dataset_type_key": this.state.dataType,
       "training_dataset_url": this.state.dataTrainUrl,
+      "training_dataset_server_path": _SERVER_UPLOAD_FILE_NAME,
       "description": this.state.description,
       "test_dataset_url": ''
     });
@@ -109,10 +133,10 @@ class DatasetCreate extends Component {
   addExampleUrl = () => {
     // set URL
     var url = ""
-    if ( this.state.dataType == "ZYGOSITY") {
+    if (this.state.dataType == "ZYGOSITY") {
       url = "https://de.cyverse.org/dl/d/2FFA3458-2DDF-4FCB-B1FE-DF5C08A0BD28/protein.train.csv"
     }
-    else if(this.state.dataType == "SNP") {
+    else if (this.state.dataType == "SNP") {
       url = "https://de.cyverse.org/dl/d/3AB7C76F-F1C5-4C55-A6CA-0E2D77A8EEB4/scn_example.csv"
     }
 
@@ -174,7 +198,7 @@ class DatasetCreate extends Component {
         closable={false}
         onClose={this.onDrawerClose}
         visible={this.state.drawer_visible}
-        // visible={"true"}
+      // visible={"true"}
       >
         <p>Followings are restrictions to create a dataset:
           <ul>
@@ -227,6 +251,11 @@ class DatasetCreate extends Component {
         />
       </div>
     )
+    let UploadField = (
+      <Upload {...props}>
+        <Button icon={<UploadOutlined />}>Click to Upload</Button>
+      </Upload>
+    )
     return (
       <div>
         <Title level={2}>Creating dataset</Title>
@@ -234,6 +263,7 @@ class DatasetCreate extends Component {
           {datasetName}
           {dataType}
           {dataUrl}
+          {UploadField}
           {Description}
           <div style={{ paddingTop: '40px' }}>
             <Button type="primary" size={'large'}
