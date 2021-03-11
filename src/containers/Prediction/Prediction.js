@@ -13,7 +13,9 @@ export default class Prediction extends Component {
         }
     }
 
-    submit = (dataType, model, inputData, SNPsInfo) => {
+    submit = (dataType, model, inputData, _SERVER_UPLOAD_FILE_NAME) => {
+        // console.log(_SERVER_UPLOAD_FILE_NAME);
+        // alert(inputData)
         this.setState({loading:true})
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -21,6 +23,7 @@ export default class Prediction extends Component {
             {
                 "experiment_info_id":model,
                 "input_data":inputData,
+                "test_dataset_server_path":_SERVER_UPLOAD_FILE_NAME,
                 // "additional_information":SNPsInfo,
             });
         var requestOptions = {

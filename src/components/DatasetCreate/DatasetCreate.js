@@ -47,6 +47,7 @@ class DatasetCreate extends Component {
       urlExample: '',
       keyOfInputUrl: 0,
       drawer_visible: false,
+      uploadMethod:'',
     };
     this.ref_example_data_text = React.createRef();
   }
@@ -62,6 +63,15 @@ class DatasetCreate extends Component {
     this.setState({
       dataType: value,
     })
+  }
+
+  onChangeUploadMethod = (value) => {
+   console.log(value);
+   this.setState({
+     uploadMethod:value,
+     dataTrainUrl:'',
+   })
+   _SERVER_UPLOAD_FILE_NAME = '';
   }
 
   onChangeDataUrl = ({ target: { value } }) => {
@@ -120,7 +130,7 @@ class DatasetCreate extends Component {
   create = () => {
     // console.log(this.state.dataType,this.state.datasetName,
     //     this.state.description,this.state.dataTrainUrl)
-    if (this.state.datasetName !== '' && this.state.dataTrainUrl !== '') {
+    if (this.state.datasetName !== '' && (this.state.dataTrainUrl !== '' || _SERVER_UPLOAD_FILE_NAME !== '')) {
       this.fetchToCreate();
       this.setState({
         loading: true,
@@ -218,26 +228,25 @@ class DatasetCreate extends Component {
     let dataUrl = (
       <div id='dataUrl' style={{ paddingTop: '30px' }}>
         <label className={Style.title}>
-          Link to training and validation dataset<span style={{ color: 'red' }}>*</span> :
-          <a className={Style.a_example} onClick={this.addExampleUrl} >Link to example</a>,
+          Upload training and validation dataset<span style={{ color: 'red' }}>*</span> :
           <a className={Style.a_example} onClick={this.showDrawer}>Show data format</a>
         </label>
         <br></br>
-        {/* <Text
-          // allowClear
-          field="example_url"
-          onChange={this.onChangeDataUrl}
-          ref={this.ref_example_data_text}
-          className={Style.dataUrl}
-        /> */}
-        <Input placeholder="input a link to your data"
-          key={this.state.keyOfInputUrl}
-          defaultValue={this.state.dataTrainUrl}
-          allowClear
-          onChange={this.onChangeDataUrl}
-          className={Style.dataUrl} />
+        {/* Choose upload method */}
+        <Select
+          className={Style.chooseUploadMethod}
+          showSearch
+          placeholder="Choose upload method"
+          optionFilterProp="children"
+          onChange={this.onChangeUploadMethod}
+        >
+          <Option value="input">Transfer file from shared link</Option>
+          <Option value="upload">Upload file from local machine</Option>
+        </Select>
+        <br></br>
       </div>
     );
+    
     let Description = (
       <div style={{ paddingTop: '30px' }}>
         <div className={Style.title}>
@@ -251,11 +260,33 @@ class DatasetCreate extends Component {
         />
       </div>
     )
+
     let UploadField = (
-      <Upload {...props}>
-        <Button icon={<UploadOutlined />}>Click to Upload</Button>
-      </Upload>
+      <br></br>
     )
+
+    if (this.state.uploadMethod == 'upload') {
+      UploadField = (
+        <Upload {...props} >
+          <Button className = {Style.uplodModel} icon={<UploadOutlined />}>Click to Upload</Button>
+        </Upload>
+      )
+    }else if(this.state.uploadMethod == 'input'){
+      UploadField = (
+        <div style = {{marginTop:'8px'}}>
+          <a className={Style.a_example2} onClick={this.addExampleUrl} >Link to example</a>
+          <br></br>
+          <Input placeholder="input a link to your data"
+            key={this.state.keyOfInputUrl}
+            defaultValue={this.state.dataTrainUrl}
+            allowClear
+            onChange={this.onChangeDataUrl}
+            className={Style.dataUrl} />
+        </div>
+        
+      )
+    }
+
     return (
       <div>
         <Title level={2}>Creating dataset</Title>

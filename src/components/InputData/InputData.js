@@ -3,11 +3,34 @@ import Style from './inputdata.module.css'
 import { Select } from 'antd';
 import { Input, Button, message } from 'antd';
 import { Next } from 'react-bootstrap/esm/PageItem';
-import { Typography } from 'antd';
+import { Typography, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 
 const { Option } = Select;
 const { TextArea } = Input;
+
+var _SERVER_UPLOAD_FILE_NAME = '';
+const props = {
+  name: 'dataset_file',
+  action: '/api/datasets/upload_dataset_file/',
+  accept:".csv",
+  headers: {
+    authorization: 'authorization-text',
+  },
+  onChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+      _SERVER_UPLOAD_FILE_NAME = info.file.response.message;
+      // console.log(_SERVER_UPLOAD_FILE_NAME); 
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+};
 
 export default class InputData extends Component {
     constructor(props) {
@@ -20,6 +43,8 @@ export default class InputData extends Component {
             experimentInfo: [],
             loading: props.loading,
             keyOfSNPExampleData: 0,
+            dataset_type_name:'',
+            uploadMethod:''
         };
     }
 
@@ -44,6 +69,7 @@ export default class InputData extends Component {
             .catch(error => console.log('error', error));
     }
 
+
     getExperimentInfo = (result) => {
         let info = JSON.parse(result).message;
         // console.log(dataInfo)
@@ -60,10 +86,15 @@ export default class InputData extends Component {
     }
 
     onChangeModel = (value) => {
-        console.log(`selected ${value}`);
+        let tempInfo = this.state.experimentInfo
+        // console.log(`selected ${value}`);
+        // console.log(this.state.experimentInfo)
+        let dataset_type_name = tempInfo[value-this.state.experimentInfo[0].experiment_info_id].dataset_type_name;
         this.setState({
             model: value,
+            dataset_type_name: dataset_type_name,
         })
+        
     }
 
     onChangeInputData = ({ target: { value } }) => {
@@ -77,6 +108,14 @@ export default class InputData extends Component {
             SNPsInfo: value
         })
     };
+
+    onChangeUploadMethod = (value) => {
+        console.log(value);
+        this.setState({
+          uploadMethod:value,
+        })
+        _SERVER_UPLOAD_FILE_NAME = '';
+    }
 
     fetchExampleSNPdata = () => {
         var url = "https://de.cyverse.org/dl/d/8F6ECCAE-CABF-44BA-B39A-E77B0FAA623B/test_data.txt";
@@ -100,8 +139,10 @@ export default class InputData extends Component {
     };
 
     submit = () => {
-        if (this.state.inputData != '' && this.state.medel != '') {
-            this.props.submit(this.state.dataType, this.state.model, this.state.inputData)
+        // alert(this.state.medel)
+        if ( (this.state.inputData != '' || _SERVER_UPLOAD_FILE_NAME != '') && this.state.model != '') {
+            console.log(_SERVER_UPLOAD_FILE_NAME)
+            this.props.submit(this.state.dataType, this.state.model, this.state.inputData, _SERVER_UPLOAD_FILE_NAME)
         } else {
             message.warning("Invalid Input")
         }
@@ -128,6 +169,47 @@ export default class InputData extends Component {
                 </Select>
             </div>
         )
+
+        let typeOfDataset = (
+            <p></p>
+        )
+        if (this.state.dataset_type_name !== '') {
+            typeOfDataset = (
+                <p>Type of training data: {this.state.dataset_type_name}</p>
+            )
+        }
+
+        // choose upload method
+        let UploadField = (
+            <br></br>
+          )
+      
+          if (this.state.uploadMethod == 'upload') {
+            UploadField = (
+              <Upload {...props} >
+                <Button className = {Style.uplodModel} icon={<UploadOutlined />}>Click to Upload</Button>
+              </Upload>
+            )
+          }else if(this.state.uploadMethod == 'input'){
+            UploadField = (
+                <div>
+                    <a className={Style.inputData_a} onClick={this.fetchExampleSNPdata}>Load an example</a>
+                    <br></br>
+                    <TextArea
+                        key={this.state.keyOfSNPExampleData}
+                        defaultValue={this.state.inputData}
+                        className={Style.inputData}
+                        onChange={this.onChangeInputData}
+                        placeholder="Input your data"
+                        rows={6}
+                        wrap="off"
+                        allowClear
+                    />
+                </div>
+                
+            )
+          }
+
         let model = (
             <div style={{ paddingTop: '30px' }}>
                 <label className={Style.title}>Model<span style={{ color: 'red' }}>*</span>:</label>
@@ -149,6 +231,8 @@ export default class InputData extends Component {
                         })
                     }
                 </Select>
+                <br></br>
+                {typeOfDataset}
             </div>
         )
 
@@ -156,19 +240,20 @@ export default class InputData extends Component {
             <div style={{ clear: 'both', paddingTop: '30px' }}>
                 <div className={Style.title}>
                     <label >Input Data<span style={{ color: 'red' }}>*</span> :</label>
-                    <a className={Style.inputData_a} onClick={this.fetchExampleSNPdata}>Load an example</a>
                     {/* <a href = '###' className = {Style.inputData_a} >upload</a> */}
+                    <br></br>
+                    <Select
+                        className={Style.chooseUploadMethod}
+                        showSearch
+                        placeholder="Choose upload method"
+                        optionFilterProp="children"
+                        onChange={this.onChangeUploadMethod}
+                        >
+                        <Option value="input">Paste data from Excel</Option>
+                        <Option value="upload">Upload file from local machine</Option>
+                    </Select>
                 </div>
-                <TextArea
-                    key={this.state.keyOfSNPExampleData}
-                    defaultValue={this.state.inputData}
-                    className={Style.inputData}
-                    onChange={this.onChangeInputData}
-                    placeholder="Input your data"
-                    rows={6}
-                    wrap="off"
-                    allowClear
-                />
+                {UploadField}
             </div>
         )
         let SNPsInfo = (
