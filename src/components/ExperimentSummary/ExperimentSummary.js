@@ -108,6 +108,12 @@ export default class ExperimentSummary extends Component {
         };
         const hasSelected = selectedRowKeys.length > 0;
         const data_table = []
+        console.log(this.state.experimentInfo)
+        // let test = [];
+        // test.forEach((e,v) => {
+        //     console.log("OK")
+        // })
+        console.log(Array.isArray(this.state.experimentInfo))
         this.state.experimentInfo.forEach((element, index) => {
             // created time
             let num_milliseconds = Date.parse(element.created_at);
@@ -139,6 +145,7 @@ export default class ExperimentSummary extends Component {
                 )
             }
         })
+        
         return (
             <div>
                 <Title level={2}>Summary of experiments</Title>
