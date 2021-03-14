@@ -113,12 +113,25 @@ export default class InputData extends Component {
         console.log(value);
         this.setState({
           uploadMethod:value,
+          inputData:'',
         })
         _SERVER_UPLOAD_FILE_NAME = '';
+        
     }
 
+
     fetchExampleSNPdata = () => {
-        var url = "https://de.cyverse.org/dl/d/8F6ECCAE-CABF-44BA-B39A-E77B0FAA623B/test_data.txt";
+
+        var url = "";
+        if (this.state.dataset_type_name == "Zygosity - homozygous, heterozygous, and reference homozygous") {
+            url = "https://de.cyverse.org/dl/d/8F6ECCAE-CABF-44BA-B39A-E77B0FAA623B/test_data.txt";
+        }
+        else if (this.state.dataset_type_name == "SNP - adenine (A), thymine (T), cytosine (C) and guanine (G)") {
+            url = "https://de.cyverse.org/dl/d/932F9D34-1D84-4B5D-A5D5-595408D42BEB/scn_example_top3.txt"
+        }
+        // console.log(this.state.uploadMethod); 
+        // console.log(url); 
+
         var requestOptions = {
             method: 'GET',
             redirect: 'follow'
