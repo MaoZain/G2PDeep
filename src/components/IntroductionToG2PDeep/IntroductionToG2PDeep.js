@@ -47,7 +47,7 @@ export default class InputData extends Component {
             description="Upload and create dataset of SNP."
           />
           <Step
-            title="Experiments"
+            title="Projects"
             description="Build, train, analysis state-of-the-art deep learning models."
           />
           <Step
@@ -114,7 +114,7 @@ export default class InputData extends Component {
         </div>
         <div id='step_content_experiments' style={{ display: this.state.current_step == 2 ? 'block' : 'none' }}>
           <img src={workflow_experiment} style={{ width: '100%' }}></img>
-          <Title level={4} style={{ paddingTop: '40px' }} >Experiments</Title>
+          <Title level={4} style={{ paddingTop: '40px' }} >Projects</Title>
           <p>
             G2PDeep allows users to build, train and analysis state-of-the-art deep learning models.
             It also provides a series of interactive charts to monitor the training processing and learning curve of the model.

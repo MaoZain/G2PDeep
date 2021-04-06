@@ -52,7 +52,7 @@ export default class Navigator extends Component {
                     <Menu.Item key="details"><NavLink to="/datasets/details" activeStyle = {selectedStyle}>Details</NavLink></Menu.Item>
                     <Menu.Item key="createDataset"><NavLink to="/datasets/createDataset" activeStyle = {selectedStyle}>Create</NavLink></Menu.Item>
                 </SubMenu>
-                <SubMenu key="experiment" icon={<FundOutlined />} title="Experiments">
+                <SubMenu key="experiment" icon={<FundOutlined />} title="Projects">
                     <Menu.Item key="experimentsSummary"><NavLink to="/experiment/summary" activeStyle = {selectedStyle}>Summary</NavLink></Menu.Item>
                     <Menu.Item key="experimentsDetail"><NavLink to="/experiment/detail" activeStyle = {selectedStyle}>Details</NavLink></Menu.Item>
                     <Menu.Item key="compareExperiment"><NavLink to="/experiment/compare" activeStyle = {selectedStyle}>Compare</NavLink></Menu.Item>

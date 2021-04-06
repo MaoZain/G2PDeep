@@ -241,7 +241,7 @@ export default class ExperimentDetail extends Component {
     }
     return (
       <div>
-        <Title level={2}>Experiment details</Title>
+        <Title level={2}>Project details</Title>
         <div style={{ paddingTop: '40px' }}>
           {detailsDes}
           <br></br>

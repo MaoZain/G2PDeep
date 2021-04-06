@@ -7,6 +7,7 @@ import {
     SyncOutlined,
     CloseCircleOutlined,
 } from '@ant-design/icons';
+import { Divider } from 'antd';
 
 const { Title } = Typography;
 
@@ -20,7 +21,7 @@ export default class ExperimentSummary extends Component {
         }
         this.tableColumns = [
             {
-                title: 'Name',
+                title: 'Project Name',
                 dataIndex: 'name',
             },
             {
@@ -145,14 +146,23 @@ export default class ExperimentSummary extends Component {
                 )
             }
         })
-        
+
         return (
             <div>
-                <Title level={2}>Summary of experiments</Title>
-                <div id='experiment_summary_content' style={{ width: '850px', paddingTop: '40px' }}>
+                <Title level={2}>Summary of projects</Title>
+                <div>
+                    <p>Instructions:</p>
+                    <ul>
+                        <li>Click project name to see detail of project.</li>
+                        <li>Choose projects to compare performance.</li>
+                    </ul>
+
+                </div>
+                <Divider />
+                <div id='experiment_summary_content' style={{ width: '850px' }}>
                     <div style={{ marginBottom: 16 }}>
                         <Button type="primary" onClick={this.compare} loading={loading}>
-                            Compare
+                            Compare (up to 4)
                         </Button>
                         <span style={{ marginLeft: 8 }}>
                             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}

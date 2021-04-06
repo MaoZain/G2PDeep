@@ -330,7 +330,7 @@ class ExperimentCreate extends Component {
         // console.log(this.state.a)
         let experimentName = (
             <div id='experimentName'>
-                <label className={Style.title}>Experiment Name<span style={{ color: 'red' }}>*</span> :</label>
+                <label className={Style.title}>Project Name<span style={{ color: 'red' }}>*</span> :</label>
                 <br></br>
                 <Input placeholder="input your dataset's name"
                     allowClear
@@ -362,7 +362,7 @@ class ExperimentCreate extends Component {
         );
         let parameter = (
             <div style={{ width: '850px', paddingTop: '30px' }}>
-                <label className={Style.title}>Experiment parameters :</label>
+                <label className={Style.title}>Training parameters :</label>
                 <br></br>
                 <label className={Style.title_small}>Epoch :</label>
                 <Slider
@@ -581,7 +581,7 @@ class ExperimentCreate extends Component {
         )
         return (
             <div>
-                <h2>Creating experiment</h2>
+                <h2>Creating project</h2>
 
                 <div style={{paddingTop:'40px'}}>
                     {experimentName}

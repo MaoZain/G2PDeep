@@ -194,7 +194,7 @@ class ExperimentCompare extends Component {
         }
         return (
             <div>
-              <Title level={2}>Comparison of methods experiment</Title>
+              <Title level={2}>Comparison of projects</Title>
               <div style={{paddingTop:'40px'}}>
                  <label className={Style.title} style={{display:this.state.compareInfo.length>0 ? 'block':'none'}}>Summary of experiments: </label>
                  {compareTable}
