@@ -21,7 +21,7 @@ export default class ExperimentSummary extends Component {
         }
         this.tableColumns = [
             {
-                title: 'Project Name',
+                title: 'Project name',
                 dataIndex: 'name',
             },
             {
@@ -55,13 +55,19 @@ export default class ExperimentSummary extends Component {
                 },
             },
             {
-                title: 'Created Date',
+                title: 'Estimated training time (hours)',
+                dataIndex: 'estimated_training_time',
+            },
+            {
+                title: 'Created date',
                 dataIndex: 'createdDate',
             },
+            
             {
                 title: 'Description',
                 dataIndex: 'description',
             },
+            
         ]
     }
 
@@ -130,6 +136,7 @@ export default class ExperimentSummary extends Component {
                         createdDate: created_time,
                         updatedDate: element.updated_at,
                         status: element.experiment_status,
+                        estimated_training_time:element.estimated_training_time, 
                         key: element.experiment_info_id,
                     }
                 )
@@ -141,6 +148,7 @@ export default class ExperimentSummary extends Component {
                         createdDate: created_time,
                         updatedDate: element.updated_at,
                         status: element.experiment_status,
+                        estimated_training_time:element.estimated_training_time, 
                         key: element.experiment_info_id,
                     }
                 )

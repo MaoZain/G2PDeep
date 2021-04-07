@@ -169,6 +169,7 @@ export default class ExperimentDetail extends Component {
         <Empty />
       </div>
     )
+
     if (this.state.loadDetailStatus) {
       detailsDes = (
         <Spin></Spin>
@@ -200,6 +201,11 @@ export default class ExperimentDetail extends Component {
         );
       }
 
+      let model_hyperparameters_desc = ""
+      this.state.detail[0].model_hyperparameters.forEach((element, index) => {
+        model_hyperparameters_desc = <span>{model_hyperparameters_desc}{element}<br></br></span>
+      })
+
       detailsDes = (
         <div>
           <Descriptions
@@ -209,26 +215,40 @@ export default class ExperimentDetail extends Component {
             layout="vertical"
             bordered
           >
-            <Descriptions.Item label="Dataset Name">{this.state.detail[0].dataset_name}</Descriptions.Item>
-            <Descriptions.Item label="Type of dataset">SNPs</Descriptions.Item>
-            <Descriptions.Item label="Status" span={2}>
+            <Descriptions.Item label="Dataset name">{this.state.detail[0].dataset_name}</Descriptions.Item>
+            <Descriptions.Item label="Type of dataset">{this.state.detail[0].dataset_type_name}</Descriptions.Item>
+            <Descriptions.Item label="Training parameters">
+              Epochs: {this.state.detail[0].experimental_parameters.epochs}
+              <br />
+              Batch size: {this.state.detail[0].experimental_parameters.batch_size}
+              <br />
+              Learning rate: {this.state.detail[0].experimental_parameters.learning_rate}
+              <br />
+              Optimizer: {this.state.detail[0].experimental_parameters.optimizer}
+              <br />
+              Early stopping patience: {this.state.detail[0].experimental_parameters.early_stopping_patience}
+            </Descriptions.Item>
+            <Descriptions.Item label="Model hyperparameters">
+              {model_hyperparameters_desc}
+            </Descriptions.Item>
+            <Descriptions.Item label="Training status" span={2}>
               {status_tag}
             </Descriptions.Item>
           </Descriptions>
           <br></br>
           <Collapse defaultActiveKey={['1', '2', '3']} >
-            <Panel header="Model Details" key="1">
+            <Panel header="Model details" key="1">
               <img src={this.state.detail[0].model_plot_url}
-                style={{ width: '60%' }}></img>
+                style={{ width: '50%' }}></img>
             </Panel>
-            <Panel header="Learning Curve" key="2">
+            <Panel header="Learning curve" key="2">
               <HighchartsReact
                 highcharts={Highcharts}
                 options={chartOfCurveOption}
                 callback={this.afterChartOfCurveCreated}
               />
             </Panel>
-            <Panel header="Predicted VS True" key="3">
+            <Panel header="Predicted v.s. True (Available when training process is done)" key="3">
               <HighchartsReact
                 highcharts={Highcharts}
                 options={chartVsOption}

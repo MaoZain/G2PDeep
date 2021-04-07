@@ -7,10 +7,17 @@ import { Text } from "informed";
 import { Typography } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import dataset_example_img from './dataset_example.png'
+import { Divider } from 'antd';
 const { Title } = Typography;
 
 const { Option } = Select;
 const { TextArea } = Input;
+
+message.config({
+  top: 100,
+  duration: 5,
+  maxCount: 5,
+});
 
 // TODO(ziting): change following code if you like.
 var _SERVER_UPLOAD_FILE_NAME = '';
@@ -120,7 +127,7 @@ class DatasetCreate extends Component {
       this.props.fetchDatasetInfo();
       this.props.history.push("/datasets/summary");
     } else {
-      message.warning(JSON.parse(result).message)
+      message.error(JSON.parse(result).message)
     }
     this.setState({
       loading: false,
@@ -130,13 +137,24 @@ class DatasetCreate extends Component {
   create = () => {
     // console.log(this.state.dataType,this.state.datasetName,
     //     this.state.description,this.state.dataTrainUrl)
-    if (this.state.datasetName !== '' && (this.state.dataTrainUrl !== '' || _SERVER_UPLOAD_FILE_NAME !== '')) {
+    if (this.state.datasetName !== '' && (this.state.dataTrainUrl !== '' || _SERVER_UPLOAD_FILE_NAME !== '') && this.state.dataType !== '') {
       this.fetchToCreate();
       this.setState({
         loading: true,
       })
     } else {
-      message.warning('Invalid creation')
+      var msg = '';
+      if (this.state.datasetName == '') {
+        msg = "Dataset name cannot be empty."
+      }
+      else if (this.state.dataType == '') {
+        msg = "Please choose data type."
+      }
+      else if( (this.state.dataTrainUrl == '' || _SERVER_UPLOAD_FILE_NAME == '') ) {
+        msg = "Please provide a link to dataset or upload a CSV file."
+      }
+      
+      message.warning(msg)
     }
   };
 
@@ -170,6 +188,19 @@ class DatasetCreate extends Component {
   };
 
   render() {
+
+    let instructions = (
+      <div>
+        <p>Instructions:</p>
+        <ul>
+          <li>Please check your data format before creating dataset. <a className={Style.a_example} onClick={this.showDrawer}>Show data format</a>.</li>
+          <li>Enter dataset name and choose the corresponding data type.</li>
+          <li>Provide a link or upload a file to create dataset.</li>
+          <li>Please wait for a while. The system validates data format and creates dataset afterward.</li>
+        </ul>
+      </div>
+    )
+
     // console.log(this.context)
     let datasetName = (
       <div id='datasetName'>
@@ -229,7 +260,7 @@ class DatasetCreate extends Component {
       <div id='dataUrl' style={{ paddingTop: '30px' }}>
         <label className={Style.title}>
           Upload training and validation dataset<span style={{ color: 'red' }}>*</span> :
-          <a className={Style.a_example} onClick={this.showDrawer}>Show data format</a>
+          
         </label>
         <br></br>
         {/* Choose upload method */}
@@ -290,7 +321,9 @@ class DatasetCreate extends Component {
     return (
       <div>
         <Title level={2}>Creating dataset</Title>
-        <div style={{ paddingTop: '40px' }}>
+        {instructions}
+        <Divider />
+        <div>
           {datasetName}
           {dataType}
           {dataUrl}
