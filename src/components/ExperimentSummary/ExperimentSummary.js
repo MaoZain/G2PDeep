@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import { Table, Tag, Button, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { Typography } from 'antd';
+import { Progress } from 'antd';
+import { Tooltip } from 'antd';
 import {
+    ClockCircleOutlined,
     CheckCircleOutlined,
     SyncOutlined,
     CloseCircleOutlined,
@@ -27,27 +30,53 @@ export default class ExperimentSummary extends Component {
             {
                 title: 'Status',
                 dataIndex: 'status',
-                render: (status) => {
-                    let color = '';
+                render: (_, data) => {
+                    // console.log(data);
+                    let status = data.status;
+                    let task_percentage = data.task_percentage;
+                    let task_log = "";
+
+                    if (data.task_log !== '') {
+                        let idx = 1;
+                        data.task_log.forEach((element, _) => {
+                            task_log = <span>{task_log}Step {idx}: {element}<br></br></span>;
+                            idx += 1;
+                        })
+                    }
+
                     let tag_str = '';
-                    if (status == 'PENDING' || status == 'RUNNING') {
+                    if (status == 'PENDING') {
                         tag_str = (
-                            <Tag icon={<SyncOutlined spin />} color="processing">
+                            <Tag icon={<ClockCircleOutlined spin />} color="default">
                                 {status}
                             </Tag>);
                     }
+                    else if (status == 'RUNNING') {
+                        tag_str = (
+                            <Tooltip title={task_log} color='blue'>
+                                <Tag icon={<ClockCircleOutlined spin />} color="processing">
+                                    {status}
+                                </Tag>
+                                <Progress percent={task_percentage}  status="active" />
+                            </Tooltip>
+                        );
+                    }
                     else if (status == 'SUCCESS') {
                         tag_str = (
-                            <Tag icon={<CheckCircleOutlined />} color="success">
-                                {status}
-                            </Tag>
+                            <Tooltip title={task_log} color='green'>
+                                <Tag icon={<CheckCircleOutlined />} color="success">
+                                    {status}
+                                </Tag>
+                            </Tooltip >
                         );
                     }
                     else {
                         tag_str = (
-                            <Tag icon={<CloseCircleOutlined />} color="error">
-                                {status}
-                            </Tag>
+                            <Tooltip title={task_log} color='red'>
+                                <Tag icon={<CloseCircleOutlined />} color="error">
+                                    {status}
+                                </Tag>
+                            </Tooltip >
                         );
                     }
 
@@ -62,12 +91,12 @@ export default class ExperimentSummary extends Component {
                 title: 'Created date',
                 dataIndex: 'createdDate',
             },
-            
+
             {
                 title: 'Description',
                 dataIndex: 'description',
             },
-            
+
         ]
     }
 
@@ -128,15 +157,17 @@ export default class ExperimentSummary extends Component {
             const created_time = date.toLocaleString('en-US',);
 
             // success ruuning 
-            if (element.experiment_status === 'SUCCESS' || element.experiment_status === 'RUNNING' || element.experiment_status === 'PENDING') {
+            if (element.experiment_status === 'SUCCESS' || element.experiment_status === 'RUNNING') {
                 data_table.push(
                     {
-                        name: <a onClick={() => { this.showDetails(index, element.experiment_info_id) }}><Link to="/experiment/detail">{element.experiment_name}</Link></a>,
+                        name: <Tooltip title="Click to show details"><a onClick={() => { this.showDetails(index, element.experiment_info_id) }}><Link to="/experiment/detail">{element.experiment_name}</Link></a></Tooltip>,
                         description: element.description,
                         createdDate: created_time,
                         updatedDate: element.updated_at,
                         status: element.experiment_status,
-                        estimated_training_time:element.estimated_training_time, 
+                        task_percentage: element.task_percentage.toFixed(1),
+                        task_log: element.task_log,
+                        estimated_training_time: element.estimated_training_time,
                         key: element.experiment_info_id,
                     }
                 )
@@ -148,7 +179,9 @@ export default class ExperimentSummary extends Component {
                         createdDate: created_time,
                         updatedDate: element.updated_at,
                         status: element.experiment_status,
-                        estimated_training_time:element.estimated_training_time, 
+                        task_percentage: element.task_percentage.toFixed(1),
+                        task_log: element.task_log,
+                        estimated_training_time: element.estimated_training_time,
                         key: element.experiment_info_id,
                     }
                 )
