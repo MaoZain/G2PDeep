@@ -39,6 +39,11 @@ class ExperimentCompare extends Component {
                 key:'PEARSON_CORRELATION_COEFFICIENT_train'
             },
             {
+              title:'R^2 (train metric)',
+              dataIndex:'R2_train',
+              key:'R2_train'
+            },
+            {
                 title: 'Mean Absolute Error(train metric)',
                 dataIndex: 'MEAN_ABSOLUTE_ERROR_train',
                 key:'MEAN_ABSOLUTE_ERROR_train'
@@ -52,6 +57,11 @@ class ExperimentCompare extends Component {
                 title:'Person Correlation Coefficient(valid metric)',
                 dataIndex:'PEARSON_CORRELATION_COEFFICIENT_valid',
                 key:'PEARSON_CORRELATION_COEFFICIENT_valid'
+            },
+            {
+              title:'R^2 (valid metric)',
+              dataIndex:'R2_valid',
+              key:'R2_valid'
             },
             {
                 title:'Mean Absolute Error(valid metric)',
@@ -176,9 +186,11 @@ class ExperimentCompare extends Component {
                         MEAN_ABSOLUTE_ERROR_train:element.train_metric.MEAN_ABSOLUTE_ERROR.toFixed(3),
                         MEAN_SQUARED_ERROR_train:element.train_metric.MEAN_SQUARED_ERROR.toFixed(3),
                         PEARSON_CORRELATION_COEFFICIENT_train:element.train_metric.PEARSON_CORRELATION_COEFFICIENT.toFixed(3),
+                        R2_train:element.train_metric.R2.toFixed(3),
                         MEAN_ABSOLUTE_ERROR_valid:element.valid_metric.MEAN_ABSOLUTE_ERROR.toFixed(3),
                         MEAN_SQUARED_ERROR_valid:element.valid_metric.MEAN_SQUARED_ERROR.toFixed(3),
                         PEARSON_CORRELATION_COEFFICIENT_valid:element.valid_metric.PEARSON_CORRELATION_COEFFICIENT.toFixed(3),
+                        R2_valid:element.valid_metric.R2.toFixed(3),
                         loss:element.experimental_parameters.loss,
                         epochs:element.experimental_parameters.epochs,
                         metrics:element.experimental_parameters.metrics,

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Descriptions, Badge, Tag, Empty, Spin, Collapse } from 'antd';
 import Highcharts from 'highcharts'
+import exporting from "highcharts/modules/exporting.js";
 import HighchartsReact from 'highcharts-react-official'
 import { Typography } from 'antd';
 import {
@@ -11,6 +12,8 @@ import {
 
 const { Title } = Typography;
 const { Panel } = Collapse;
+
+exporting(Highcharts);
 
 export default class ExperimentDetail extends Component {
   constructor(props) {
@@ -118,11 +121,11 @@ export default class ExperimentDetail extends Component {
         width: 900
       },
       title: {
-        text: 'Learning Curve'
+        text: 'Learning curve'
       },
       yAxis: {
         title: {
-          text: 'Metric'
+          text: 'MSE(Loss)/MAE(Metric)'
         }
       },
       xAxis: {
@@ -179,6 +182,8 @@ export default class ExperimentDetail extends Component {
     if (!this.state.loadDetailStatus && this.state.detail.length > 0) {
       //status tag
       let status_tag = '';
+      let training_performance = '';
+      let validation_performance = '';
       let status = this.state.detail[0].experiment_status;
       if (status == 'PENDING' || status == 'RUNNING') {
         status_tag = (
@@ -191,6 +196,24 @@ export default class ExperimentDetail extends Component {
           <Tag icon={<CheckCircleOutlined />} color="success">
             {status}
           </Tag>
+        );
+
+        training_performance = (
+          <div>
+            Pearson's Correlation Coefficient (PCC): {this.state.detail[0].train_metric.PEARSON_CORRELATION_COEFFICIENT.toFixed(3)} <br/>
+            R^2: {this.state.detail[0].train_metric.R2.toFixed(3)} <br/>
+            Mean Squared Error (MSE): {this.state.detail[0].train_metric.MEAN_ABSOLUTE_ERROR.toFixed(3)} <br/>
+            Mean Absolute Error (MAE): {this.state.detail[0].train_metric.MEAN_SQUARED_ERROR.toFixed(3)} <br/>
+          </div>
+        );
+
+        validation_performance = (
+          <div>
+            Pearson's Correlation Coefficient (PCC): {this.state.detail[0].valid_metric.PEARSON_CORRELATION_COEFFICIENT.toFixed(3)} <br/>
+            R^2: {this.state.detail[0].valid_metric.R2.toFixed(3)} <br/>
+            Mean Squared Error (MSE): {this.state.detail[0].valid_metric.MEAN_ABSOLUTE_ERROR.toFixed(3)} <br/>
+            Mean Absolute Error (MAE): {this.state.detail[0].valid_metric.MEAN_SQUARED_ERROR.toFixed(3)} <br/>
+          </div>
         );
       }
       else {
@@ -230,6 +253,12 @@ export default class ExperimentDetail extends Component {
             </Descriptions.Item>
             <Descriptions.Item label="Model hyperparameters">
               {model_hyperparameters_desc}
+            </Descriptions.Item>
+            <Descriptions.Item label="Performance on training dataset">
+              {training_performance}
+            </Descriptions.Item>
+            <Descriptions.Item label="Performance on validation dataset">
+              {validation_performance}
             </Descriptions.Item>
             <Descriptions.Item label="Training status" span={2}>
               {status_tag}
