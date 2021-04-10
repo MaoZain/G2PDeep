@@ -625,9 +625,9 @@ class ExperimentCreate extends Component {
         return (
             <div>
                 <h2>Creating project</h2>
-                <Button type="primary" size='large'
+                <Button type="primary" size='middle'
                         style={{ marginTop: '10px' }}
-                        onClick={this.playVedio}>bofangshiping</Button>
+                        onClick={this.playVedio}>Tutorial video</Button>
 
                 <Modal title="vesdio model name" 
                     footer = {null} 
