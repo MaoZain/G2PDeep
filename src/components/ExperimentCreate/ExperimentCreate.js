@@ -15,12 +15,14 @@ import dnn_layer from './dnn_layer.png'
 import dnn_output from './dnn_output.png'
 import $ from 'jquery'
 import { withRouter } from 'react-router-dom'
-// import youtube from 'react-youtube'
+import YouTube from 'react-youtube'
+import { ReactVideo } from 'reactjs-media';
 
 
 
 const { Option } = Select;
 const { TextArea } = Input;
+var videoE = null;
 
 
 class ExperimentCreate extends Component {
@@ -324,6 +326,7 @@ class ExperimentCreate extends Component {
     }
 
     delFCn = () => {
+        
         let temp = [...this.state.fCn];
         temp.pop();
         this.setState({
@@ -341,7 +344,16 @@ class ExperimentCreate extends Component {
         }
     }
 
+    _onReady = (event) =>{
+        videoE = event
+    }
+
     render() {
+        if(!this.state.isModalVisible){
+            if(videoE !== null){
+                videoE.target.pauseVideo()
+            }
+        }
         // console.log(this.state.a)
         let experimentName = (
             <div id='experimentName'>
@@ -595,8 +607,21 @@ class ExperimentCreate extends Component {
             </div>
         )
 
-       
+      
+        let video = (
+                <div style = {{width:"100%"}}>
+                    <YouTube videoId="2g811Eo7K8U"
+                        opts = {
+                            {width:"100%"}
+                        }
+                        onReady={this._onReady}
+                    
+                    >
+                    </YouTube>
+                </div>
+            )
         
+
         return (
             <div>
                 <h2>Creating project</h2>
@@ -604,8 +629,13 @@ class ExperimentCreate extends Component {
                         style={{ marginTop: '10px' }}
                         onClick={this.playVedio}>bofangshiping</Button>
 
-                <Modal title="vesdio model name" footer = {null} visible={this.state.isModalVisible} onCancel={this.handleClose}>
-                    123
+                <Modal title="vesdio model name" 
+                    footer = {null} 
+                    visible={this.state.isModalVisible} 
+                    onCancel={this.handleClose}
+                    width="50%"
+                >
+                    {video}
                 </Modal>
 
                 <div style={{paddingTop:'40px'}}>
