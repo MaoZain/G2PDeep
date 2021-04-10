@@ -13,7 +13,7 @@ import {
 import { Divider } from 'antd';
 
 const { Title } = Typography;
-const reloadTimer = 10;
+var reload_time = Date.now();
 
 export default class ExperimentSummary extends Component {
     constructor(props) {
@@ -22,7 +22,7 @@ export default class ExperimentSummary extends Component {
             selectedRowKeys: [], // Check here to configure the default column
             loading: props.loading,
             experimentInfo: props.experimentInfo,
-            reloadTimer:10,
+            reloadTimer:15,
         }
         this.tableColumns = [
             {
@@ -114,7 +114,7 @@ export default class ExperimentSummary extends Component {
             })
         }else{
             this.setState({
-                reloadTimer:10
+                reloadTimer:15
             })
             this.props.fetchExperimentInfo();
         }
@@ -138,12 +138,19 @@ export default class ExperimentSummary extends Component {
         // console.log(this.state.selectedRowKeys)
     };
 
-    reload = () => {
-        console.log("reload");
-        this.setState({
-            reloadTimer:10
-        })
-        this.props.fetchExperimentInfo();
+    reloadThrotle = () => {
+        let time = Date.now();
+        if(time - reload_time >= 5000){
+            console.log("reload");
+            this.setState({
+                reloadTimer:15
+            })
+            this.props.fetchExperimentInfo();
+            reload_time = Date.now();
+        }else{
+            let warnning = "Please try it " + Math.round(5-(time - reload_time)/1000)+" second later"
+            message.warning(warnning,3)
+        }
     }
 
     onSelectChange = selectedRowKeys => {
@@ -242,7 +249,7 @@ export default class ExperimentSummary extends Component {
                         <Button type="primary" onClick={this.compare} loading={loading}>
                             Compare (up to 4)
                         </Button>
-                        <Button type="primary" onClick={this.reload} style={{ background:'1890ff', marginLeft:'10px' }}>
+                        <Button type="primary" onClick={this.reloadThrotle} style={{ background:'1890ff', marginLeft:'10px' }}>
                             Reload countdown timer : {this.state.reloadTimer}
                         </Button>
                         <span style={{ marginLeft: 8 }}>
