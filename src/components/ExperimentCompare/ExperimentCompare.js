@@ -124,7 +124,7 @@ class ExperimentCompare extends Component {
         let compareData =[]
         let chartOption = {
           chart: {
-            width: 900
+            width: 1000
           },
           title: {
             text: ''

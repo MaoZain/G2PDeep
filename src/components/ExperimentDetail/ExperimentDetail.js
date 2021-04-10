@@ -4,6 +4,7 @@ import Highcharts from 'highcharts'
 import exporting from "highcharts/modules/exporting.js";
 import HighchartsReact from 'highcharts-react-official'
 import { Typography } from 'antd';
+import ImageZoom from 'react-medium-image-zoom'
 import {
   CheckCircleOutlined,
   SyncOutlined,
@@ -273,8 +274,18 @@ export default class ExperimentDetail extends Component {
           <br></br>
           <Collapse style={{ width: '1000px' }} defaultActiveKey={['1', '2', '3']} >
             <Panel header="Model details" key="1">
-              <img src={this.state.detail[0].model_plot_url}
-                style={{ width: '50%' }}></img>
+              <ImageZoom
+                image={{
+                  src: this.state.detail[0].model_plot_url,
+                  alt: 'model details',
+                  style: { width: '50%' }
+                }}
+                zoomImage={{
+                  src: this.state.detail[0].model_plot_url,
+                  alt: 'model details'
+                }}
+              />
+              
             </Panel>
             <Panel header="Learning curve" key="2">
               <HighchartsReact
