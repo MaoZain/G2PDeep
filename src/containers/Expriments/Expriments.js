@@ -84,7 +84,7 @@ class Expriments extends Component {
 
     getExperimentInfo = (result) => {
         let info = JSON.parse(result).message;
-        console.log(info)
+        // console.log(info)
         this.setState({
             experimentInfo: info,
         })
@@ -137,7 +137,7 @@ class Expriments extends Component {
     }
 
     render() {
-        console.log(this.state.showDetails_index)
+        // console.log(this.state.showDetails_index)
         return (
             <div id = 'experiment'>
                 <div id = 'exSummary'

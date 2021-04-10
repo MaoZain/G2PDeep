@@ -21,8 +21,8 @@ class App extends React.PureComponent {
     let time = new Date().toISOString();
     let userId = time + randomId;
     //console.log("current userid is"+userId);
-   	// localStorage.setItem('G2PDeep', userId);
-     localStorage.setItem('G2PDeep', "debug");
+   	localStorage.setItem('G2PDeep', userId);
+    //  localStorage.setItem('G2PDeep', "debug");
      console.log(localStorage)
     //console.log('userId in setUserId is ',this.state.userId)
   }
@@ -31,7 +31,7 @@ class App extends React.PureComponent {
     if(!localStorage.getItem('G2PDeep')){
       this.setUserId();
     }
-    this.setUserId();
+    // this.setUserId();
   }
 
   render(){
