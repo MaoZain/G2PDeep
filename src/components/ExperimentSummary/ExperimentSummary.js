@@ -153,16 +153,19 @@ export default class ExperimentSummary extends Component {
             // console.log(selectedRowKeys[selectedRowKeys.length-1])
         } )
         //reassign selectedRowKey
-        if (selectedRowKeys.length <= 4) {
+        if (selectedRowKeys.length <= 4 && selectedRowKeys.length>0) {
             console.log('selectedRowKeys changed: ', selectedRowKeys);
             if(status[0].experiment_status == "SUCCESS"){
                 this.setState({ selectedRowKeys: selectedRowKeys });
             }else{
                 message.warning("Only seccessed Items can be compared with others")
             }
-        } else {
+        }else if(selectedRowKeys.length == 0){
+            this.setState({ selectedRowKeys: selectedRowKeys });
+        }else {
             message.warning('Choose up to 4 !')
         }
+        
     };
 
     showDetails = (index, id) => {
