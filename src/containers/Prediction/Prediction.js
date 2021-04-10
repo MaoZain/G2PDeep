@@ -35,7 +35,7 @@ export default class Prediction extends Component {
         fetch("/api/operation/run_model_prediction/", requestOptions)
         .then(response => response.text())
         .then(result => this.getResult(result))
-        .catch(error => console.log('error', error));
+        .catch(error => { message.warning('create fail'); console.log(error) });
     }
 
     getResult = (result) =>{

@@ -13,6 +13,7 @@ import {
 import { Divider } from 'antd';
 
 const { Title } = Typography;
+const reloadTimer = 10;
 
 export default class ExperimentSummary extends Component {
     constructor(props) {
@@ -21,6 +22,7 @@ export default class ExperimentSummary extends Component {
             selectedRowKeys: [], // Check here to configure the default column
             loading: props.loading,
             experimentInfo: props.experimentInfo,
+            reloadTimer:10,
         }
         this.tableColumns = [
             {
@@ -100,9 +102,23 @@ export default class ExperimentSummary extends Component {
         ]
     }
 
-    // componentDidMount = () => {
-    //     this.props.history.push("/datasets/summary")
-    // }
+    componentDidMount = () => {
+        setInterval(()=>this.timer(),1000)
+    }
+
+    timer(){
+        // console.log(this.state.reloadTimer)
+        if(this.state.reloadTimer > 0 ){
+            this.setState({
+                reloadTimer:this.state.reloadTimer - 1
+            })
+        }else{
+            this.setState({
+                reloadTimer:10
+            })
+            this.props.fetchExperimentInfo();
+        }
+    }
 
     componentWillReceiveProps = (nextProps) => {
         // console.log(nextProps.datasetsInfo)
@@ -122,10 +138,28 @@ export default class ExperimentSummary extends Component {
         // console.log(this.state.selectedRowKeys)
     };
 
+    reload = () => {
+        console.log("reload");
+        this.setState({
+            reloadTimer:10
+        })
+        this.props.fetchExperimentInfo();
+    }
+
     onSelectChange = selectedRowKeys => {
+        //get the value of status based on the exactly key
+        let status = this.state.experimentInfo.filter( function(item){
+            return item.experiment_info_id == selectedRowKeys[selectedRowKeys.length -1 ]
+            // console.log(selectedRowKeys[selectedRowKeys.length-1])
+        } )
+        //reassign selectedRowKey
         if (selectedRowKeys.length <= 4) {
             console.log('selectedRowKeys changed: ', selectedRowKeys);
-            this.setState({ selectedRowKeys: selectedRowKeys });
+            if(status[0].experiment_status == "SUCCESS"){
+                this.setState({ selectedRowKeys: selectedRowKeys });
+            }else{
+                message.warning("Only seccessed Items can be compared with others")
+            }
         } else {
             message.warning('Choose up to 4 !')
         }
@@ -144,12 +178,12 @@ export default class ExperimentSummary extends Component {
         };
         const hasSelected = selectedRowKeys.length > 0;
         const data_table = []
-        console.log(this.state.experimentInfo)
+        // console.log(this.state.experimentInfo)
         // let test = [];
         // test.forEach((e,v) => {
         //     console.log("OK")
         // })
-        console.log(Array.isArray(this.state.experimentInfo))
+        // console.log(Array.isArray(this.state.experimentInfo))
         this.state.experimentInfo.forEach((element, index) => {
             // created time
             let num_milliseconds = Date.parse(element.created_at);
@@ -204,6 +238,9 @@ export default class ExperimentSummary extends Component {
                     <div style={{ marginBottom: 16 }}>
                         <Button type="primary" onClick={this.compare} loading={loading}>
                             Compare (up to 4)
+                        </Button>
+                        <Button type="primary" onClick={this.reload} style={{ background:'1890ff', marginLeft:'10px' }}>
+                            Reload countdown timer : {this.state.reloadTimer}
                         </Button>
                         <span style={{ marginLeft: 8 }}>
                             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}

@@ -28,6 +28,7 @@ class Expriments extends Component {
     }
 
     fetchExperimentInfo = () => {
+        console.log("fetchEInfo")
         var requestOptions = {
             method: 'GET',
             redirect: 'follow'
@@ -147,6 +148,7 @@ class Expriments extends Component {
                       experimentInfo = {this.state.experimentInfo}
                       showDetails = {this.showDetails}
                       compare = {this.compare}
+                      fetchExperimentInfo = {this.fetchExperimentInfo}
                       history = {this.props.history} />
                 </div>
                 <div id = 'exCreateDataset'

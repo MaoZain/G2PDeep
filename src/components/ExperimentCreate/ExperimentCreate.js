@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Style from './experimentCreate.module.css'
-import { Select, Button, Input, message } from 'antd';
+import { Select, Button, Input, message, Modal } from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 import Paper from '@material-ui/core/Paper';
@@ -15,11 +15,13 @@ import dnn_layer from './dnn_layer.png'
 import dnn_output from './dnn_output.png'
 import $ from 'jquery'
 import { withRouter } from 'react-router-dom'
+// import youtube from 'react-youtube'
 
 
 
 const { Option } = Select;
 const { TextArea } = Input;
+
 
 class ExperimentCreate extends Component {
 
@@ -39,6 +41,7 @@ class ExperimentCreate extends Component {
             datasetInfo: [],
             learningRate: 0.00001,
             loading: false,
+            isModalVisible:false,
         }
     }
 
@@ -145,7 +148,7 @@ class ExperimentCreate extends Component {
             fetch("/api/operation/conduct_experiment/", requestOptions)
                 .then(response => response.text())
                 .then(result => this.checkCreate(result))
-                .catch(error => console.log('error', error));
+                .catch(error => { message.warning('create fail'); console.log(error) });
         } else {
             message.warning('The number of filters in the last layers for both the left and right tower must be the same.')
         }
@@ -187,6 +190,18 @@ class ExperimentCreate extends Component {
             description: value
         })
     };
+
+    handleClose = () => {
+        this.setState({
+            isModalVisible: false
+        })
+    }
+
+    playVedio = () => {
+        this.setState({
+            isModalVisible: true
+        })
+    }
 
     addLeftCnn = () => {
         if (this.state.leftCnnLayerNum < this.state.maxLayerNum) {
@@ -579,9 +594,19 @@ class ExperimentCreate extends Component {
                 />
             </div>
         )
+
+       
+        
         return (
             <div>
                 <h2>Creating project</h2>
+                <Button type="primary" size='large'
+                        style={{ marginTop: '10px' }}
+                        onClick={this.playVedio}>bofangshiping</Button>
+
+                <Modal title="vesdio model name" footer = {null} visible={this.state.isModalVisible} onCancel={this.handleClose}>
+                    123
+                </Modal>
 
                 <div style={{paddingTop:'40px'}}>
                     {experimentName}

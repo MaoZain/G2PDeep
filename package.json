@@ -26,6 +26,8 @@
     "react-scripts": "4.0.1",
     "react-table": "^7.6.2",
     "react-table-v6": "^6.8.6",
+    "react-youtube": "^7.13.1",
+    "reactjs-media": "^1.5.1",
     "redux": "^4.0.5",
     "web-vitals": "^0.2.4"
   },
@@ -52,5 +54,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-dplayer": "^0.4.2"
   }
 }

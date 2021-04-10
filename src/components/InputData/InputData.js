@@ -89,10 +89,14 @@ export default class InputData extends Component {
         let tempInfo = this.state.experimentInfo
         // console.log(`selected ${value}`);
         // console.log(this.state.experimentInfo)
-        let dataset_type_name = tempInfo[value-this.state.experimentInfo[0].experiment_info_id].dataset_type_name;
+        let selectedItem = tempInfo.filter(function(item){
+            return item.experiment_info_id == value;
+        })
+        // console.log(test)
+        // let dataset_type_name = tempInfo[value-this.state.experimentInfo[0].experiment_info_id].dataset_type_name;
         this.setState({
             model: value,
-            dataset_type_name: dataset_type_name,
+            dataset_type_name: selectedItem[0].dataset_type_name,
         })
         
     }
