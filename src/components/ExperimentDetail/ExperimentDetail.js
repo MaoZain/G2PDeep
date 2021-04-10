@@ -61,6 +61,9 @@ export default class ExperimentDetail extends Component {
       title: {
         text: 'True v.s. predicted quantitative traits.'
       },
+      credits: {
+        enabled:false
+      },
       xAxis: {
         title: {
           enabled: true,
@@ -122,6 +125,9 @@ export default class ExperimentDetail extends Component {
       },
       title: {
         text: 'Learning curve'
+      },
+      credits: {
+        enabled:false
       },
       yAxis: {
         title: {
@@ -265,7 +271,7 @@ export default class ExperimentDetail extends Component {
             </Descriptions.Item>
           </Descriptions>
           <br></br>
-          <Collapse defaultActiveKey={['1', '2', '3']} >
+          <Collapse style={{ width: '1000px' }} defaultActiveKey={['1', '2', '3']} >
             <Panel header="Model details" key="1">
               <img src={this.state.detail[0].model_plot_url}
                 style={{ width: '50%' }}></img>

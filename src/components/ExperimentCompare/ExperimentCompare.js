@@ -129,6 +129,9 @@ class ExperimentCompare extends Component {
           title: {
             text: ''
           },
+          credits: {
+            enabled:false
+          },
           yAxis: {
             title: {
               text: 'Metric/Loss'
@@ -200,8 +203,10 @@ class ExperimentCompare extends Component {
                     }
                 )
             });
-            compareTable =(
-                <Table columns={this.tableColumns} dataSource={compareData} scroll={{ x: 2300 }} />
+            compareTable =(<div style={{boxShadow:' 0 6px 20px 0 rgba(0, 0, 0, 0.19)'}}>
+                              <Table columns={this.tableColumns} pagination={false} dataSource={compareData} scroll={{ x: 2300 }} />
+
+            </div>
             ) 
         }
         return (
@@ -212,12 +217,14 @@ class ExperimentCompare extends Component {
                  {compareTable}
                 <br></br>
                 <label className={Style.title} style={{display:this.state.compareInfo.length>0 ? 'block':'none'}}>Observation Chart:</label>
-                <HighchartsReact 
-                    // style ={{width:'900px'}}
-                    highcharts={Highcharts}
-                    options={chartOption}
-                    callback={ this.afterChartCreated }
-                />
+                <div style={{boxShadow:' 0 6px 20px 0 rgba(0, 0, 0, 0.19)',display:this.state.compareInfo.length>0 ? 'block':'none'}}>
+                  <HighchartsReact    
+                      highcharts={Highcharts}
+                      options={chartOption}
+                      callback={ this.afterChartCreated }
+                  />
+                </div>
+                
               </div>
             </div>
         )
