@@ -9,6 +9,7 @@ services:
     command: sh -c "export PORT=3335 && npm start"
     tty: true
     volumes:
+      - ${PWD}:/usr/src/app
       - '/usr/src/app/node_modules'
     expose: 
       - 80
