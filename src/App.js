@@ -28,8 +28,11 @@ class App extends React.PureComponent {
   }
 
   componentDidMount = () => {
-    if(localStorage.getItem('G2PDeep')){
+    if(!localStorage.getItem('G2PDeep')){
       this.setUserId();
+    }
+    else{
+      console.log(localStorage.getItem('G2PDeep')); 
     }
     // this.setUserId();
   }

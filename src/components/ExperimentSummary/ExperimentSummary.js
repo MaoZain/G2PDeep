@@ -250,7 +250,7 @@ export default class ExperimentSummary extends Component {
                             Compare (up to 4)
                         </Button>
                         <Button type="primary" onClick={this.reloadThrotle} style={{ background:'1890ff', marginLeft:'10px' }}>
-                            Reload countdown timer : {this.state.reloadTimer}
+                            Refresh in seconds : {this.state.reloadTimer}
                         </Button>
                         <span style={{ marginLeft: 8 }}>
                             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}

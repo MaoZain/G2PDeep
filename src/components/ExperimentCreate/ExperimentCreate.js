@@ -610,7 +610,7 @@ class ExperimentCreate extends Component {
       
         let video = (
                 <div style = {{width:"100%"}}>
-                    <YouTube videoId="2g811Eo7K8U"
+                    <YouTube videoId="qlWYL3e2hBU"
                         opts = {
                             {width:"100%"}
                         }
