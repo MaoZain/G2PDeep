@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import Style from './inputdata.module.css'
 import { Select } from 'antd';
-import { Input, Button, message } from 'antd';
+import { Input, Button, message, Drawer } from 'antd';
 import { Next } from 'react-bootstrap/esm/PageItem';
 import { Typography, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import { Divider } from 'antd';
+import dataset_example_img from './prediction_dataset_example.png'
 const { Title } = Typography;
 
 const { Option } = Select;
@@ -12,24 +14,24 @@ const { TextArea } = Input;
 
 var _SERVER_UPLOAD_FILE_NAME = '';
 const props = {
-  name: 'dataset_file',
-  action: '/api/datasets/upload_dataset_file/',
-  accept:".csv",
-  headers: {
-    authorization: 'authorization-text',
-  },
-  onChange(info) {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully`);
-      _SERVER_UPLOAD_FILE_NAME = info.file.response.message;
-      // console.log(_SERVER_UPLOAD_FILE_NAME); 
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
+    name: 'dataset_file',
+    action: '/api/datasets/upload_dataset_file/',
+    accept: ".csv",
+    headers: {
+        authorization: 'authorization-text',
+    },
+    onChange(info) {
+        if (info.file.status !== 'uploading') {
+            console.log(info.file, info.fileList);
+        }
+        if (info.file.status === 'done') {
+            message.success(`${info.file.name} file uploaded successfully`);
+            _SERVER_UPLOAD_FILE_NAME = info.file.response.message;
+            // console.log(_SERVER_UPLOAD_FILE_NAME); 
+        } else if (info.file.status === 'error') {
+            message.error(`${info.file.name} file upload failed.`);
+        }
+    },
 };
 
 export default class InputData extends Component {
@@ -43,8 +45,8 @@ export default class InputData extends Component {
             experimentInfo: [],
             loading: props.loading,
             keyOfSNPExampleData: 0,
-            dataset_type_name:'',
-            uploadMethod:''
+            dataset_type_name: '',
+            uploadMethod: ''
         };
     }
 
@@ -89,7 +91,7 @@ export default class InputData extends Component {
         let tempInfo = this.state.experimentInfo
         // console.log(`selected ${value}`);
         // console.log(this.state.experimentInfo)
-        let selectedItem = tempInfo.filter(function(item){
+        let selectedItem = tempInfo.filter(function (item) {
             return item.experiment_info_id == value;
         })
         // console.log(test)
@@ -98,7 +100,7 @@ export default class InputData extends Component {
             model: value,
             dataset_type_name: selectedItem[0].dataset_type_name,
         })
-        
+
     }
 
     onChangeInputData = ({ target: { value } }) => {
@@ -116,11 +118,11 @@ export default class InputData extends Component {
     onChangeUploadMethod = (value) => {
         console.log(value);
         this.setState({
-          uploadMethod:value,
-          inputData:'',
+            uploadMethod: value,
+            inputData: '',
         })
         _SERVER_UPLOAD_FILE_NAME = '';
-        
+
     }
 
 
@@ -139,12 +141,12 @@ export default class InputData extends Component {
         var requestOptions = {
             method: 'GET',
             redirect: 'follow'
-          };
-        
+        };
+
         fetch(url, requestOptions)
-        .then(response => response.text())
-        .then(result => this.addExampleSNPData(result))
-        .catch(error => console.log('error', error));
+            .then(response => response.text())
+            .then(result => this.addExampleSNPData(result))
+            .catch(error => console.log('error', error));
     }
 
     addExampleSNPData = (result) => {
@@ -157,7 +159,7 @@ export default class InputData extends Component {
 
     submit = () => {
         // alert(this.state.medel)
-        if ( (this.state.inputData != '' || _SERVER_UPLOAD_FILE_NAME != '') && this.state.model != '') {
+        if ((this.state.inputData != '' || _SERVER_UPLOAD_FILE_NAME != '') && this.state.model != '') {
             console.log(_SERVER_UPLOAD_FILE_NAME)
             this.props.submit(this.state.dataType, this.state.model, this.state.inputData, _SERVER_UPLOAD_FILE_NAME)
         } else {
@@ -165,7 +167,63 @@ export default class InputData extends Component {
         }
     };
 
+    // drawer
+    showDrawer = () => {
+        this.setState({
+            drawer_visible: true
+        })
+    };
+    onDrawerClose = () => {
+        this.setState({
+            drawer_visible: false
+        })
+    };
+
     render() {
+        let instructions = (
+            <div>
+                <p>Instructions:</p>
+                <ul>
+                    <li>Please check your data format before predicting the quantitative phenotype. <a className={Style.a_example} onClick={this.showDrawer}>Show data format</a>.</li>
+                    <li>Choose a well-trained model.</li>
+                    <li>Provide a data copied from Excel or upload CSV file direct.</li>
+                    <li>Please wait for a while. The system validates data format and predicts the quantitative phenotype.</li>
+                </ul>
+            </div>
+        )
+
+        let drawer_data_format = (
+            <Drawer
+                title="Data type & data format"
+                width={'50%'}
+                placement="right"
+                closable={false}
+                onClose={this.onDrawerClose}
+                  visible={this.state.drawer_visible}
+                // visible={"true"}
+            >
+                <p>Followings are restrictions to input dataset.</p>
+                <b>For uploaded files:</b>
+                <ul>
+                    <li>The file must be a comma-separated values (CSV) file.</li>
+                </ul>
+                <b>For input field:</b>
+                <ul>
+                    <li>The input field must be a tab-separated values.</li>
+                    <li>The data copied and pasted from excel is great. (Note: the Excel might ignores some columns if the data is large)</li>
+                </ul>
+                <b>For data format:</b>
+                <ul>
+                    <li>Zygosity data in the file must be coded as -1, 0, 1, or 2 to represent missing genotypes, homozygous, heterozygous, and reference homozygous, respectively.</li>
+                    <li>SNP data in the file must be coded as IUPAC.</li>
+                </ul>
+                <p>Following is an axample of valid data:</p>
+                <img src={dataset_example_img} style={{ width: '70%' }}></img>
+
+            </Drawer>
+        );
+
+
         // console.log(this.state.experimentInfo)
         let dataType = (
             <div>
@@ -199,15 +257,15 @@ export default class InputData extends Component {
         // choose upload method
         let UploadField = (
             <br></br>
-          )
-      
-          if (this.state.uploadMethod == 'upload') {
+        )
+
+        if (this.state.uploadMethod == 'upload') {
             UploadField = (
-              <Upload {...props} >
-                <Button className = {Style.uplodModel} icon={<UploadOutlined />}>Click to Upload</Button>
-              </Upload>
+                <Upload {...props} >
+                    <Button className={Style.uplodModel} icon={<UploadOutlined />}>Click to Upload</Button>
+                </Upload>
             )
-          }else if(this.state.uploadMethod == 'input'){
+        } else if (this.state.uploadMethod == 'input') {
             UploadField = (
                 <div>
                     <a className={Style.inputData_a} onClick={this.fetchExampleSNPdata}>Load an example</a>
@@ -223,9 +281,9 @@ export default class InputData extends Component {
                         allowClear
                     />
                 </div>
-                
+
             )
-          }
+        }
 
         let model = (
             <div style={{ paddingTop: '30px' }}>
@@ -265,7 +323,7 @@ export default class InputData extends Component {
                         placeholder="Choose upload method"
                         optionFilterProp="children"
                         onChange={this.onChangeUploadMethod}
-                        >
+                    >
                         <Option value="input">Paste data from Excel</Option>
                         <Option value="upload">Upload file from local machine</Option>
                     </Select>
@@ -289,6 +347,8 @@ export default class InputData extends Component {
         return (
             <div>
                 <Title level={2}>Prediction and discovery</Title>
+                {instructions}
+                <Divider />
                 {/* {dataType} */}
                 {model}
                 {inputData}
@@ -299,6 +359,7 @@ export default class InputData extends Component {
                         loading={this.state.loading}
                     >Submit</Button>
                 </div>
+                {drawer_data_format}
             </div>
         )
     }
