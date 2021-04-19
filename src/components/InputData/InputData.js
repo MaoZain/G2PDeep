@@ -6,6 +6,7 @@ import { Next } from 'react-bootstrap/esm/PageItem';
 import { Typography, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
+import { Alert } from 'antd';
 import dataset_example_img from './prediction_dataset_example.png'
 const { Title } = Typography;
 
@@ -199,8 +200,8 @@ export default class InputData extends Component {
                 placement="right"
                 closable={false}
                 onClose={this.onDrawerClose}
-                  visible={this.state.drawer_visible}
-                // visible={"true"}
+                visible={this.state.drawer_visible}
+            // visible={"true"}
             >
                 <p>Followings are restrictions to input dataset.</p>
                 <b>For uploaded files:</b>
@@ -221,6 +222,17 @@ export default class InputData extends Component {
                 <img src={dataset_example_img} style={{ width: '70%' }}></img>
 
             </Drawer>
+        );
+
+        // Error message
+        let error_alert = (
+            <div style={{ width: '40%' }}>
+            <Alert
+                description="Error Description Error Description Error Description Error Description Error Description Error Description"
+                type="error"
+                closable
+            />
+            </div>
         );
 
 

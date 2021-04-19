@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import InputData from '../../components/InputData/InputData.js';
 import Result from '../../components/Result/Result.js';
 import {message} from 'antd'
+import { Alert } from 'antd';
 // import Style from './prediction.module.css'
 
 export default class Prediction extends Component {
@@ -10,8 +11,11 @@ export default class Prediction extends Component {
         this.state = {
             result:undefined,
             loading:false,
+            error_feedback_msg:'',
         }
     }
+
+
 
     submit = (dataType, model, inputData, _SERVER_UPLOAD_FILE_NAME) => {
         // console.log(_SERVER_UPLOAD_FILE_NAME);
@@ -35,7 +39,8 @@ export default class Prediction extends Component {
         fetch("/api/operation/run_model_prediction/", requestOptions)
         .then(response => response.text())
         .then(result => this.getResult(result))
-        .catch(error => { message.warning('create fail'); console.log(error) });
+        // .catch(error => { message.warning('create fail'); console.log(error) });
+        .catch(error => { this.showErrorMessage(error); console.log(error) });
     }
 
     getResult = (result) =>{
@@ -45,19 +50,43 @@ export default class Prediction extends Component {
                 result:res,
             })
         }else{
-            message.warning('predict failed !')
+            this.setState({
+                error_feedback_msg:JSON.parse(result).message,
+            })
         }
+    }
+
+    showErrorMessage = (error) => {
         this.setState({
-            loading:false,
+            error_feedback_msg:'Internal error. Please contact administrator.',
         })
     }
 
+
+
     render() {
+        // Error message
+        let error_alert = (<div></div>);
+        if (this.state.error_feedback_msg !== '') {
+            error_alert = (
+                <div style={{ width: '60%' }}>
+                <Alert
+                    showIcon
+                    description={this.state.error_feedback_msg}
+                    type="error"
+                    closable
+                />
+                </div>
+            );
+        }
+
         return (
             <div id ='prediction'>
+                
                 <InputData submit = {this.submit} 
                     loading = {this.state.loading} />
                 <Result result = {this.state.result} />
+                {error_alert}
             </div>
         )
     }
