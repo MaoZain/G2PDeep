@@ -17,6 +17,7 @@ import $ from 'jquery'
 import { withRouter } from 'react-router-dom'
 import YouTube from 'react-youtube'
 import { ReactVideo } from 'reactjs-media';
+import { Divider } from 'antd';
 
 
 
@@ -354,6 +355,19 @@ class ExperimentCreate extends Component {
                 videoE.target.pauseVideo()
             }
         }
+
+        let instructions = (
+            <div>
+              <p>Instructions:</p>
+              <ol>
+                <li>Enter dataset name and choose dataset that you created.</li>
+                <li>Please modify the training parameters and hyperparameters according to your data.</li>
+                <li>A tutorial video is provided in<a className={Style.a_example} onClick={this.playVedio}>here</a>.</li>
+              </ol>
+              <p>NOTE: The default training parameters and hyperparameters are the best parameters for SoyNAM dataset.</p>
+            </div>
+          )
+
         // console.log(this.state.a)
         let experimentName = (
             <div id='experimentName'>
@@ -625,9 +639,8 @@ class ExperimentCreate extends Component {
         return (
             <div>
                 <h2>Creating project</h2>
-                <Button type="primary" size='middle'
-                        style={{ marginTop: '10px' }}
-                        onClick={this.playVedio}>Tutorial video</Button>
+                {instructions}
+                 <Divider />
 
                 <Modal title="vesdio model name" 
                     footer = {null} 

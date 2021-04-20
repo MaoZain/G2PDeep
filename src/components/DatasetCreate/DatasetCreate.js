@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react'
 import Style from './datasetCreate.module.css'
 import { Select } from 'antd';
-import { Input, Button, message, Drawer, Upload } from 'antd';
+import { Input, Button, message, Drawer, Upload, Modal } from 'antd';
 import { withRouter } from 'react-router-dom'
 import { Text } from "informed";
 import { Typography } from 'antd';
@@ -9,6 +9,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import dataset_example_img from './dataset_example.png'
 import { Divider } from 'antd';
 import { Alert } from 'antd';
+import YouTube from 'react-youtube'
 const { Title } = Typography;
 
 const { Option } = Select;
@@ -57,6 +58,7 @@ class DatasetCreate extends Component {
       drawer_visible: false,
       uploadMethod: '',
       error_feedback_msg: '',
+      isModalVisible: false,
     };
     this.ref_example_data_text = React.createRef();
   }
@@ -121,7 +123,7 @@ class DatasetCreate extends Component {
       fetch('/api/datasets/create_training_dataset/', requestOptions),
       new Promise((resolve, reject) =>
         // 2*60*1000 second => 10 mins.
-        setTimeout(() => reject(new Error('Timeout')), 2*60*1000)
+        setTimeout(() => reject(new Error('Timeout')), 2 * 60 * 1000)
       )
     ])
       .then(response => response.text())
@@ -154,7 +156,7 @@ class DatasetCreate extends Component {
   }
 
   showErrorMessage = (error) => {
-    if( error.toString() == "Error: Timeout" ) {
+    if (error.toString() == "Error: Timeout") {
       this.setState({
         error_feedback_msg: 'The dataset is still creating. It will be shown in summary page once it is done.',
       })
@@ -164,7 +166,7 @@ class DatasetCreate extends Component {
         error_feedback_msg: 'Internal error. Please contact administrator.',
       })
     }
-    
+
   }
 
   create = () => {
@@ -223,6 +225,18 @@ class DatasetCreate extends Component {
     })
   };
 
+  handleClose = () => {
+    this.setState({
+      isModalVisible: false
+    })
+  }
+
+  playVedio = () => {
+    this.setState({
+      isModalVisible: true
+    })
+  }
+
   render() {
 
     let instructions = (
@@ -233,8 +247,14 @@ class DatasetCreate extends Component {
           <li>Enter dataset name and choose the corresponding data type.</li>
           <li>Provide a link or upload a file to create dataset.</li>
           <li>Please wait for a while. The system validates data format and creates dataset afterward.</li>
+          <li>A tutorial video is provided in<a className={Style.a_example} onClick={this.playVedio}>here</a>.</li>
         </ul>
-        <p>NOTE: The dataset larger than 500 MB might take more than 7 mins in average to be created.</p>
+        <p>NOTE: </p>
+        <ul>
+          <li>Zygosity and SNP data can be generated from VCf file, using PLINK2 and VCFTools respectively.</li>
+          <li>The dataset larger than 500 MB might take more than 10 mins in average to be created.</li>
+        </ul>
+        
       </div>
     )
 
@@ -279,12 +299,13 @@ class DatasetCreate extends Component {
       // visible={"true"}
       >
         <p>Followings are restrictions to create a dataset:
-          <ul>
-            <li>1. A valid link to data.</li>
-            <li>2. The data must be a comma-separated values (CSV) file.</li>
-            <li>3. Features (SNPs) in the file must be coded as -1, 0, 1, or 2 to represent missing genotypes, homozygous, heterozygous, and reference homozygous, respectively.</li>
-            <li>4. Header of label (quantitative traits) column in the file must be indicated by a word "label".</li>
-          </ul>
+          <ol>
+            <li>Providing a valid link to data or upload a file..</li>
+            <li>The data must be a comma-separated values (CSV) file.</li>
+            <li>Zygosity data must be coded as -1, 0, 1, or 2 to represent missing genotypes, homozygous, heterozygous, and reference homozygous, respectively.</li>
+            <li>SNP data must be coded as IUPAC.</li>
+            <li>Header of label (quantitative traits) column in the file must be indicated by a word "label".</li>
+          </ol>
         </p>
         <p>
           Following is an axample of valid data:
@@ -368,10 +389,34 @@ class DatasetCreate extends Component {
       );
     }
 
+    let video = (
+      <div style={{ width: "100%" }}>
+        <YouTube videoId="CXWwzV2hPSw"
+          opts={
+            { width: "100%" }
+          }
+          onReady={this._onReady}
+        >
+        </YouTube>
+      </div>
+    )
+
+    let tutorial_modal = (
+      <Modal title="vesdio model name"
+        footer={null}
+        visible={this.state.isModalVisible}
+        onCancel={this.handleClose}
+        width="50%"
+      >
+        {video}
+      </Modal>
+    );
+
     return (
       <div>
         <Title level={2}>Creating dataset</Title>
         {instructions}
+        {tutorial_modal}
         <Divider />
         <div>
           {datasetName}
