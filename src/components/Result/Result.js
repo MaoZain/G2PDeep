@@ -2,9 +2,14 @@ import React, { Component } from 'react'
 import Style from './result.module.css'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
+import exporting from "highcharts/modules/exporting.js";
+import exporting_data from "highcharts/modules/export-data.js";
 import { Collapse } from 'antd';
 
 const { Panel } = Collapse;
+
+exporting(Highcharts);
+exporting_data(Highcharts);
 
 export default class Result extends Component {
     constructor(props) {
@@ -64,7 +69,12 @@ export default class Result extends Component {
                 series: [{
                     name: 'Predicted values',
                     data: tableData
-                },]
+                },],
+                exporting: {
+                    csv: {
+                        itemDelimiter: ','
+                    }
+                }
             };
 
             saliency_map_scatter_plot = {
@@ -81,7 +91,7 @@ export default class Result extends Component {
                         enabled: true,
                         text: 'SNP index'
                     },
-                    min:0,
+                    min: 0,
                     startOnTick: true,
                     endOnTick: true,
                     showLastLabel: true
@@ -120,7 +130,12 @@ export default class Result extends Component {
                     name: 'Input data',
                     color: 'rgba(223, 83, 83, .5)',
                     data: this.state.result.saliency_top_values,
-                }]
+                }],
+                exporting: {
+                    csv: {
+                        itemDelimiter: ','
+                    }
+                }
             }
         }
         let res = (
@@ -130,7 +145,7 @@ export default class Result extends Component {
             res = (
                 <div style={{ clear: 'both', paddingTop: '30px', width: '900px' }}>
 
-                    <label className={Style.title}>Result</label>
+                    <label className={Style.title}>Results</label>
                     <Collapse defaultActiveKey={['1', '2']} >
                         <Panel header="Predicted values for given input" key="1">
                             <HighchartsReact
@@ -140,11 +155,11 @@ export default class Result extends Component {
                         </Panel>
                         <Panel header="Saliency Map" key="2">
                             {/* <img src={this.state.result.saliency_map_url} style={{width:'800px'}}></img> */}
-                            <HighchartsReact 
+                            <HighchartsReact
                                 highcharts={Highcharts}
                                 options={saliency_map_scatter_plot}
                             />
-                            <p style={{textAlign:"center"}}>The Saliency map measures individual marker effects and their associations with quantitative GWAS trait. The saliency values can be treated as a measurement of SNP contribution (1 represnting SNP has high effect, 0 representing SNP has low effect).</p>
+                            <p style={{ textAlign: "center" }}>The Saliency map measures individual marker effects and their associations with quantitative GWAS trait. The saliency values can be treated as a measurement of SNP contribution (1 represnting SNP has high effect, 0 representing SNP has low effect).</p>
                         </Panel>
                     </Collapse>
 

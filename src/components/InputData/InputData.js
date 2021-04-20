@@ -188,7 +188,12 @@ export default class InputData extends Component {
                     <li>Please check your data format before predicting the quantitative phenotype. <a className={Style.a_example} onClick={this.showDrawer}>Show data format</a>.</li>
                     <li>Choose a well-trained model.</li>
                     <li>Provide a data copied from Excel or upload CSV file direct.</li>
-                    <li>Please wait for a while. The system validates data format and predicts the quantitative phenotype.</li>
+                    <li>The system validates data format and predicts the quantitative phenotype. Please wait for a while. </li>
+                    <li>Results can be exported as image or csv file.</li>
+                </ul>
+                <p>NOTE:</p>
+                <ul>
+                    <li>Due to the data privacy on test dataset, the G2PDeep doesn't save any data and results.</li>
                 </ul>
             </div>
         )

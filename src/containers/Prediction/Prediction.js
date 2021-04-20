@@ -48,6 +48,7 @@ export default class Prediction extends Component {
             let res = JSON.parse(result).message;
             this.setState({
                 result:res,
+                loading:false,
             })
         }else{
             this.setState({
