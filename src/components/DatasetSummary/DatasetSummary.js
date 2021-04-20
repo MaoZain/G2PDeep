@@ -4,6 +4,7 @@ import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { Typography } from 'antd';
+import { Divider } from 'antd';
 const { Title } = Typography;
 
 export default class Summary extends Component {
@@ -140,9 +141,22 @@ export default class Summary extends Component {
       )
     })
 
+
+    let instructions = (
+      <div>
+        <p>Instructions:</p>
+        <ul>
+          <li>SoyNAM datasets and Bandillo's datasets are publicly available.</li>
+          <li>You can create a dataset in <Link to="/datasets/createDataset">here</Link>.</li>
+        </ul>
+      </div>
+    )
+
     return (
       <div>
         <Title level={2}>Summary of datasets</Title>
+        {instructions}
+        <Divider />
         <div id='dataTable' style={{ width: '850px', paddingTop:'40px' }}>
           <Table
             columns={this.columns_table} dataSource={data_table}

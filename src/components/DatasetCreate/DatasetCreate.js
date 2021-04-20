@@ -276,7 +276,7 @@ class DatasetCreate extends Component {
         <Select
           className={Style.dataType}
           showSearch
-          placeholder="Select a Model"
+          placeholder="Select data type"
           optionFilterProp="children"
           onChange={this.onChangeDataType}
           filterOption={(input, option) =>
