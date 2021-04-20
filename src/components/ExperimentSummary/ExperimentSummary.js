@@ -130,11 +130,17 @@ export default class ExperimentSummary extends Component {
 
     compare = () => {
         //ajax request after empty completing
-        this.setState({
-            selectedRowKeys: [],
-            loading: true,
-        });
-        this.props.compare(this.state.selectedRowKeys)
+        
+        if (this.state.selectedRowKeys.length < 2) {
+            message.warning("Please select at least two projects.")
+        }
+        else {
+            this.setState({
+                selectedRowKeys: [],
+                loading: true,
+            });
+            this.props.compare(this.state.selectedRowKeys)
+        }
         // console.log(this.state.selectedRowKeys)
     };
 
@@ -149,7 +155,7 @@ export default class ExperimentSummary extends Component {
             reload_time = Date.now();
         }else{
             let warnning = "Please try it " + Math.round(5-(time - reload_time)/1000)+" second later"
-            message.warning(warnning,3)
+            message.warning(warnning)
         }
     }
 
@@ -240,6 +246,14 @@ export default class ExperimentSummary extends Component {
                     <ul>
                         <li>Click project name to see detail of project.</li>
                         <li>Choose projects to compare performance.</li>
+                        <li>Status of project are list below. Hovering the mouse over the status to check details.
+                            <ul>
+                                <li><Tag icon={<ClockCircleOutlined />} color="default"> PENDING</Tag>: Loading the dataset.</li>
+                                <li><Tag icon={<ClockCircleOutlined />} color="processing">RUNNING</Tag>: Training the model.</li>
+                                <li><Tag icon={<CheckCircleOutlined />} color="success">SUCCESS</Tag>: Project is done.</li>
+                                <li><Tag icon={<CloseCircleOutlined />} color="error">FAILURE</Tag>: Fail to create project. </li>
+                            </ul>
+                        </li>
                     </ul>
 
                 </div>
@@ -250,7 +264,7 @@ export default class ExperimentSummary extends Component {
                             Compare (up to 4)
                         </Button>
                         <Button type="primary" onClick={this.reloadThrotle} style={{ background:'1890ff', marginLeft:'10px' }}>
-                            Refresh in seconds : {this.state.reloadTimer}
+                            Project status auto refresh in {this.state.reloadTimer} seconds
                         </Button>
                         <span style={{ marginLeft: 8 }}>
                             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
