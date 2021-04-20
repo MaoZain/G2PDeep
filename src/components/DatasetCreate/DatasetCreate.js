@@ -120,8 +120,8 @@ class DatasetCreate extends Component {
     var promise = Promise.race([
       fetch('/api/datasets/create_training_dataset/', requestOptions),
       new Promise((resolve, reject) =>
-        // 10*60*1000 second => 10 mins.
-        setTimeout(() => reject(new Error('Timeout')), 10*60*1000)
+        // 2*60*1000 second => 10 mins.
+        setTimeout(() => reject(new Error('Timeout')), 2*60*1000)
       )
     ])
       .then(response => response.text())
@@ -156,7 +156,7 @@ class DatasetCreate extends Component {
   showErrorMessage = (error) => {
     if( error.toString() == "Error: Timeout" ) {
       this.setState({
-        error_feedback_msg: 'Your data is too big to create. Please contact administrator.',
+        error_feedback_msg: 'The dataset is still creating. It will be shown in summary page once it is done.',
       })
     }
     else {
