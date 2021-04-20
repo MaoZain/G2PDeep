@@ -8,6 +8,7 @@ import { Typography } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import dataset_example_img from './dataset_example.png'
 import { Divider } from 'antd';
+import { Alert } from 'antd';
 const { Title } = Typography;
 
 const { Option } = Select;
@@ -24,7 +25,7 @@ var _SERVER_UPLOAD_FILE_NAME = '';
 const props = {
   name: 'dataset_file',
   action: '/api/datasets/upload_dataset_file/',
-  accept:".csv",
+  accept: ".csv",
   headers: {
     authorization: 'authorization-text',
   },
@@ -54,7 +55,8 @@ class DatasetCreate extends Component {
       urlExample: '',
       keyOfInputUrl: 0,
       drawer_visible: false,
-      uploadMethod:'',
+      uploadMethod: '',
+      error_feedback_msg: '',
     };
     this.ref_example_data_text = React.createRef();
   }
@@ -73,12 +75,12 @@ class DatasetCreate extends Component {
   }
 
   onChangeUploadMethod = (value) => {
-   console.log(value);
-   this.setState({
-     uploadMethod:value,
-     dataTrainUrl:'',
-   })
-   _SERVER_UPLOAD_FILE_NAME = '';
+    console.log(value);
+    this.setState({
+      uploadMethod: value,
+      dataTrainUrl: '',
+    })
+    _SERVER_UPLOAD_FILE_NAME = '';
   }
 
   onChangeDataUrl = ({ target: { value } }) => {
@@ -112,12 +114,26 @@ class DatasetCreate extends Component {
       method: 'POST',
       headers: myHeaders,
       body: raw,
-      redirect: 'follow'
+      redirect: 'follow',
     };
-    fetch("/api/datasets/create_training_dataset/", requestOptions)
+
+    var promise = Promise.race([
+      fetch('/api/datasets/create_training_dataset/', requestOptions),
+      new Promise((resolve, reject) =>
+        // 10*60*1000 second => 10 mins.
+        setTimeout(() => reject(new Error('Timeout')), 10*60*1000)
+      )
+    ])
       .then(response => response.text())
       .then(result => this.checkCreate(result))
-      .catch(error => { message.warning('create fail'); console.log(error) });
+      .catch(error => { this.showErrorMessage(error); console.log(error) });
+
+    // fetch("/api/datasets/create_training_dataset/", requestOptions)
+    //   .then(response => response.text())
+    //   .then(result => this.checkCreate(result))
+    //   .catch(error => { message.warning('create fail'); console.log(error) });
+
+
   }
 
   checkCreate = (result) => {
@@ -127,11 +143,28 @@ class DatasetCreate extends Component {
       this.props.fetchDatasetInfo();
       this.props.history.push("/datasets/summary");
     } else {
-      message.error(JSON.parse(result).message)
+      // message.error(JSON.parse(result).message)
+      this.setState({
+        error_feedback_msg: JSON.parse(result).message
+      })
     }
     this.setState({
       loading: false,
     })
+  }
+
+  showErrorMessage = (error) => {
+    if( error.toString() == "Error: Timeout" ) {
+      this.setState({
+        error_feedback_msg: 'Your data is too big to create. Please contact administrator.',
+      })
+    }
+    else {
+      this.setState({
+        error_feedback_msg: 'Internal error. Please contact administrator.',
+      })
+    }
+    
   }
 
   create = () => {
@@ -150,11 +183,14 @@ class DatasetCreate extends Component {
       else if (this.state.dataType == '') {
         msg = "Please choose data type."
       }
-      else if( (this.state.dataTrainUrl == '' || _SERVER_UPLOAD_FILE_NAME == '') ) {
+      else if ((this.state.dataTrainUrl == '' || _SERVER_UPLOAD_FILE_NAME == '')) {
         msg = "Please provide a link to dataset or upload a CSV file."
       }
-      
-      message.warning(msg)
+
+      // message.warning(msg)
+      this.setState({
+        error_feedback_msg: msg
+      })
     }
   };
 
@@ -198,6 +234,7 @@ class DatasetCreate extends Component {
           <li>Provide a link or upload a file to create dataset.</li>
           <li>Please wait for a while. The system validates data format and creates dataset afterward.</li>
         </ul>
+        <p>NOTE: The dataset larger than 500 MB might take more than 7 mins in average to be created.</p>
       </div>
     )
 
@@ -260,7 +297,7 @@ class DatasetCreate extends Component {
       <div id='dataUrl' style={{ paddingTop: '30px' }}>
         <label className={Style.title}>
           Upload training and validation dataset<span style={{ color: 'red' }}>*</span> :
-          
+
         </label>
         <br></br>
         {/* Choose upload method */}
@@ -277,7 +314,7 @@ class DatasetCreate extends Component {
         <br></br>
       </div>
     );
-    
+
     let Description = (
       <div style={{ paddingTop: '30px' }}>
         <div className={Style.title}>
@@ -299,12 +336,12 @@ class DatasetCreate extends Component {
     if (this.state.uploadMethod == 'upload') {
       UploadField = (
         <Upload {...props} >
-          <Button className = {Style.uplodModel} icon={<UploadOutlined />}>Click to Upload</Button>
+          <Button className={Style.uplodModel} icon={<UploadOutlined />}>Click to Upload</Button>
         </Upload>
       )
-    }else if(this.state.uploadMethod == 'input'){
+    } else if (this.state.uploadMethod == 'input') {
       UploadField = (
-        <div style = {{marginTop:'8px'}}>
+        <div style={{ marginTop: '8px' }}>
           <a className={Style.a_example2} onClick={this.addExampleUrl} >Link to example</a>
           <br></br>
           <Input placeholder="input a link to your data"
@@ -314,8 +351,21 @@ class DatasetCreate extends Component {
             onChange={this.onChangeDataUrl}
             className={Style.dataUrl} />
         </div>
-        
+
       )
+    }
+
+    let error_alert = (<div></div>);
+    if (this.state.error_feedback_msg !== '') {
+      error_alert = (
+        <div style={{ width: '50%', paddingTop: '20px' }}>
+          <Alert
+            showIcon
+            description={this.state.error_feedback_msg}
+            type="error"
+          />
+        </div>
+      );
     }
 
     return (
@@ -329,11 +379,13 @@ class DatasetCreate extends Component {
           {dataUrl}
           {UploadField}
           {Description}
-          <div style={{ paddingTop: '40px' }}>
+          {error_alert}
+          <div style={{ paddingTop: '20px' }}>
             <Button type="primary" size={'large'}
               onClick={this.create}
               loading={this.state.loading}
             >Create</Button>
+
           </div>
           {drawer_data_format}
         </div>
