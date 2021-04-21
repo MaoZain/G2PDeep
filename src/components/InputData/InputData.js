@@ -47,7 +47,8 @@ export default class InputData extends Component {
             loading: props.loading,
             keyOfSNPExampleData: 0,
             dataset_type_name: '',
-            uploadMethod: ''
+            uploadMethod: '',
+            loading_example: false,
         };
     }
 
@@ -127,33 +128,64 @@ export default class InputData extends Component {
     }
 
 
-    fetchExampleSNPdata = () => {
+    // fetchExampleData = () => {
 
-        var url = "";
-        if (this.state.dataset_type_name == "Zygosity - homozygous, heterozygous, and reference homozygous") {
-            url = "https://de.cyverse.org/dl/d/8F6ECCAE-CABF-44BA-B39A-E77B0FAA623B/test_data.txt";
+    //     var url = "";
+    //     if (this.state.dataset_type_name == "Zygosity - homozygous, heterozygous, and reference homozygous") {
+    //         url = "https://de.cyverse.org/dl/d/8F6ECCAE-CABF-44BA-B39A-E77B0FAA623B/test_data.txt";
+    //     }
+    //     else if (this.state.dataset_type_name == "SNP - adenine (A), thymine (T), cytosine (C) and guanine (G)") {
+    //         url = "https://de.cyverse.org/dl/d/932F9D34-1D84-4B5D-A5D5-595408D42BEB/scn_example_top3.txt"
+    //     }
+    //     // console.log(this.state.uploadMethod); 
+    //     // console.log(url); 
+
+    //     var requestOptions = {
+    //         method: 'GET',
+    //         redirect: 'follow'
+    //     };
+
+    //     fetch(url, requestOptions)
+    //         .then(response => response.text())
+    //         .then(result => this.addExampleData(result))
+    //         .catch(error => console.log('error', error));
+    // }
+    fetchExampleData = () => {
+
+        if ( this.state.model == "") {
+            message.warning("Please choose one of model.")
         }
-        else if (this.state.dataset_type_name == "SNP - adenine (A), thymine (T), cytosine (C) and guanine (G)") {
-            url = "https://de.cyverse.org/dl/d/932F9D34-1D84-4B5D-A5D5-595408D42BEB/scn_example_top3.txt"
+        else {
+            this.setState({
+                loading_example: true,
+            })
+    
+            // console.log(id)
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+            var raw = JSON.stringify(
+                {
+                    "localstorage_id": localStorage.getItem('G2PDeep'),
+                    "experiment_info_id": this.state.model,
+                });
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+            };
+            fetch("/api/datasets/retrieve_training_data_example/", requestOptions)
+                .then(response => response.text())
+                .then(result => this.addExampleData(JSON.parse(result).message))
+                .catch(error => message.warning("Unable to retrieve an example. Please contact our administrator.") );
         }
-        // console.log(this.state.uploadMethod); 
-        // console.log(url); 
-
-        var requestOptions = {
-            method: 'GET',
-            redirect: 'follow'
-        };
-
-        fetch(url, requestOptions)
-            .then(response => response.text())
-            .then(result => this.addExampleSNPData(result))
-            .catch(error => console.log('error', error));
     }
 
-    addExampleSNPData = (result) => {
+    addExampleData = (result) => {
         this.setState({
             inputData: result,
             keyOfSNPExampleData: this.state.keyOfSNPExampleData + 1,
+            loading_example: false,
         })
         // console.log(this.state);
     };
@@ -232,11 +264,11 @@ export default class InputData extends Component {
         // Error message
         let error_alert = (
             <div style={{ width: '40%' }}>
-            <Alert
-                description="Error Description Error Description Error Description Error Description Error Description Error Description"
-                type="error"
-                closable
-            />
+                <Alert
+                    description="Error Description Error Description Error Description Error Description Error Description Error Description"
+                    type="error"
+                    closable
+                />
             </div>
         );
 
@@ -284,8 +316,12 @@ export default class InputData extends Component {
             )
         } else if (this.state.uploadMethod == 'input') {
             UploadField = (
-                <div>
-                    <a className={Style.inputData_a} onClick={this.fetchExampleSNPdata}>Load an example</a>
+                <div style={{ paddingTop: '10px' }}>
+                    <Button
+                        type="primary"
+                        loading={this.state.loading_example}
+                        onClick={this.fetchExampleData}
+                    >Load an example (from training dataset)</Button>
                     <br></br>
                     <TextArea
                         key={this.state.keyOfSNPExampleData}

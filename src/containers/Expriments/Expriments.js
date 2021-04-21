@@ -28,7 +28,7 @@ class Expriments extends Component {
     }
 
     fetchExperimentInfo = () => {
-        console.log("fetchEInfo")
+        // console.log("fetchEInfo")
         var requestOptions = {
             method: 'GET',
             redirect: 'follow'
