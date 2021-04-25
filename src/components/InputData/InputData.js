@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import Style from './inputdata.module.css'
 import { Select } from 'antd';
-import { Input, Button, message, Drawer } from 'antd';
+import { Input, Button, message, Drawer, Modal } from 'antd';
 import { Next } from 'react-bootstrap/esm/PageItem';
 import { Typography, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { Divider } from 'antd';
 import { Alert } from 'antd';
+import YouTube from 'react-youtube'
 import dataset_example_img from './prediction_dataset_example.png'
 const { Title } = Typography;
 
@@ -49,6 +50,7 @@ export default class InputData extends Component {
             dataset_type_name: '',
             uploadMethod: '',
             loading_example: false,
+            isModalVisible: false,
         };
     }
 
@@ -212,6 +214,18 @@ export default class InputData extends Component {
         })
     };
 
+    handleClose = () => {
+        this.setState({
+          isModalVisible: false
+        })
+      }
+
+    playVedio = () => {
+        this.setState({
+          isModalVisible: true
+        })
+      }
+
     render() {
         let instructions = (
             <div>
@@ -222,6 +236,7 @@ export default class InputData extends Component {
                     <li>Provide a data copied from Excel or upload CSV file direct.</li>
                     <li>The system validates data format and predicts the quantitative phenotype. Please wait for a while. </li>
                     <li>Results can be exported as image or csv file.</li>
+                    <li>A tutorial video is provided in<a className={Style.a_example} onClick={this.playVedio}>here</a>.</li>
                 </ul>
                 <p>NOTE:</p>
                 <ul>
@@ -397,10 +412,33 @@ export default class InputData extends Component {
                 />
             </div>
         )
+
+        let video = (
+            <div style={{ width: "100%" }}>
+              <YouTube videoId="0ERzUTMjFl4"
+                opts={
+                  { width: "100%" }
+                }
+                onReady={this._onReady}
+              >
+              </YouTube>
+            </div>
+          )
+        let tutorial_modal = (
+            <Modal title="vesdio model name"
+              footer={null}
+              visible={this.state.isModalVisible}
+              onCancel={this.handleClose}
+              width="50%"
+            >
+              {video}
+            </Modal>
+          );
         return (
             <div>
                 <Title level={2}>Prediction and discovery</Title>
                 {instructions}
+                {tutorial_modal}
                 <Divider />
                 {/* {dataType} */}
                 {model}

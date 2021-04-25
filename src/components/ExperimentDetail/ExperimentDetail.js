@@ -5,6 +5,7 @@ import exporting from "highcharts/modules/exporting.js";
 import HighchartsReact from 'highcharts-react-official'
 import { Typography } from 'antd';
 import ImageZoom from 'react-medium-image-zoom'
+import { Divider } from 'antd';
 import {
   CheckCircleOutlined,
   SyncOutlined,
@@ -237,7 +238,18 @@ export default class ExperimentDetail extends Component {
       })
 
       detailsDes = (
+        
         <div>
+
+          <div>
+            <p>Instructions:</p>
+            <ul>
+              <li>The performances are available once training is done.</li>
+              <li>The early stopping is applied to avoid overfitting.</li>
+              </ul>
+          </div>
+          <Divider />
+
           <Descriptions
             style={{ width: '1000px' }}
             bordered
