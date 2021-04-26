@@ -15,6 +15,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 var _SERVER_UPLOAD_FILE_NAME = '';
+var videoE = null;
 const props = {
     name: 'dataset_file',
     action: '/api/datasets/upload_dataset_file/',
@@ -154,14 +155,14 @@ export default class InputData extends Component {
     // }
     fetchExampleData = () => {
 
-        if ( this.state.model == "") {
+        if (this.state.model == "") {
             message.warning("Please choose one of model.")
         }
         else {
             this.setState({
                 loading_example: true,
             })
-    
+
             // console.log(id)
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
@@ -179,7 +180,7 @@ export default class InputData extends Component {
             fetch("/api/datasets/retrieve_training_data_example/", requestOptions)
                 .then(response => response.text())
                 .then(result => this.addExampleData(JSON.parse(result).message))
-                .catch(error => message.warning("Unable to retrieve an example. Please contact our administrator.") );
+                .catch(error => message.warning("Unable to retrieve an example. Please contact our administrator."));
         }
     }
 
@@ -216,17 +217,27 @@ export default class InputData extends Component {
 
     handleClose = () => {
         this.setState({
-          isModalVisible: false
+            isModalVisible: false
         })
-      }
+    }
 
     playVedio = () => {
         this.setState({
-          isModalVisible: true
+            isModalVisible: true
         })
-      }
+    }
+
+    _onReady = (event) => {
+        videoE = event
+    }
 
     render() {
+        if (!this.state.isModalVisible) {
+            if (videoE !== null) {
+                videoE.target.pauseVideo()
+            }
+        }
+
         let instructions = (
             <div>
                 <p>Instructions:</p>
@@ -415,25 +426,25 @@ export default class InputData extends Component {
 
         let video = (
             <div style={{ width: "100%" }}>
-              <YouTube videoId="0ERzUTMjFl4"
-                opts={
-                  { width: "100%" }
-                }
-                onReady={this._onReady}
-              >
-              </YouTube>
+                <YouTube videoId="0ERzUTMjFl4"
+                    opts={
+                        { width: "100%" }
+                    }
+                    onReady={this._onReady}
+                >
+                </YouTube>
             </div>
-          )
+        )
         let tutorial_modal = (
             <Modal title="vesdio model name"
-              footer={null}
-              visible={this.state.isModalVisible}
-              onCancel={this.handleClose}
-              width="50%"
+                footer={null}
+                visible={this.state.isModalVisible}
+                onCancel={this.handleClose}
+                width="50%"
             >
-              {video}
+                {video}
             </Modal>
-          );
+        );
         return (
             <div>
                 <Title level={2}>Prediction and discovery</Title>

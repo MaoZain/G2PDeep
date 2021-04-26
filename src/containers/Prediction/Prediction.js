@@ -36,11 +36,22 @@ export default class Prediction extends Component {
         body: raw,
         redirect: 'follow'
         };
-        fetch("/api/operation/run_model_prediction/", requestOptions)
-        .then(response => response.text())
-        .then(result => this.getResult(result))
-        // .catch(error => { message.warning('create fail'); console.log(error) });
-        .catch(error => { this.showErrorMessage(error); console.log(error) });
+
+        var promise = Promise.race([
+            fetch('/api/operation/run_model_prediction/', requestOptions),
+            new Promise((resolve, reject) =>
+              // 5*60*1000 second => 5 mins.
+              setTimeout(() => reject(new Error('Timeout')), 5 * 60 * 1000)
+            )
+          ])
+            .then(response => response.text())
+            .then(result => this.getResult(result))
+            .catch(error => { this.showErrorMessage(error); console.log(error) });
+
+        // fetch("/api/operation/run_model_prediction/", requestOptions)
+        // .then(response => response.text())
+        // .then(result => this.getResult(result))
+        // .catch(error => { this.showErrorMessage(error); console.log(error) });
     }
 
     getResult = (result) =>{
@@ -49,9 +60,11 @@ export default class Prediction extends Component {
             this.setState({
                 result:res,
                 loading:false,
+                error_feedback_msg:'',
             })
         }else{
             this.setState({
+                loading:false,
                 error_feedback_msg:JSON.parse(result).message,
             })
         }
@@ -59,6 +72,7 @@ export default class Prediction extends Component {
 
     showErrorMessage = (error) => {
         this.setState({
+            loading:false,
             error_feedback_msg:'Internal error. Please contact administrator.',
         })
     }
@@ -75,7 +89,6 @@ export default class Prediction extends Component {
                     showIcon
                     description={this.state.error_feedback_msg}
                     type="error"
-                    closable
                 />
                 </div>
             );
@@ -86,8 +99,9 @@ export default class Prediction extends Component {
                 
                 <InputData submit = {this.submit} 
                     loading = {this.state.loading} />
-                <Result result = {this.state.result} />
                 {error_alert}
+                <Result result = {this.state.result} />
+                
             </div>
         )
     }

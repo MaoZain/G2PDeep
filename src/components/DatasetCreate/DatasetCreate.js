@@ -23,6 +23,7 @@ message.config({
 
 // TODO(ziting): change following code if you like.
 var _SERVER_UPLOAD_FILE_NAME = '';
+var videoE = null;
 const props = {
   name: 'dataset_file',
   action: '/api/datasets/upload_dataset_file/',
@@ -237,7 +238,16 @@ class DatasetCreate extends Component {
     })
   }
 
+  _onReady = (event) => {
+    videoE = event
+  }
+
   render() {
+    if (!this.state.isModalVisible) {
+      if (videoE !== null) {
+        videoE.target.pauseVideo()
+      }
+    }
 
     let instructions = (
       <div>
@@ -254,7 +264,7 @@ class DatasetCreate extends Component {
           <li>Zygosity and SNP data can be generated from VCf file, using PLINK2 and VCFTools respectively.</li>
           <li>The dataset larger than 500 MB might take more than 10 mins in average to be created.</li>
         </ul>
-        
+
       </div>
     )
 
