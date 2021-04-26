@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react'
 import Style from './datasetCreate.module.css'
 import { Select } from 'antd';
-import { Input, Button, message, Drawer, Upload, Modal } from 'antd';
+import { Input, Button, message, Drawer, Upload, Modal, Tag } from 'antd';
 import { withRouter } from 'react-router-dom'
 import { Text } from "informed";
 import { Typography } from 'antd';
@@ -10,6 +10,11 @@ import dataset_example_img from './dataset_example.png'
 import { Divider } from 'antd';
 import { Alert } from 'antd';
 import YouTube from 'react-youtube'
+import { Progress } from 'antd';
+import { Tooltip } from 'antd';
+import {
+  ClockCircleOutlined
+} from '@ant-design/icons';
 const { Title } = Typography;
 
 const { Option } = Select;
@@ -48,6 +53,11 @@ const props = {
 class DatasetCreate extends Component {
   constructor(props) {
     super(props);
+
+    var localstorage_id = localStorage.getItem('G2PDeep');
+    var timestamp = new Date().toISOString();
+    var task_id = localstorage_id + timestamp;
+
     this.state = {
       loading: false,
       datasetName: '',
@@ -60,8 +70,31 @@ class DatasetCreate extends Component {
       uploadMethod: '',
       error_feedback_msg: '',
       isModalVisible: false,
+      task_id: task_id,
+      task_percentage: 0,
+      task_log: '',
     };
     this.ref_example_data_text = React.createRef();
+  }
+
+  componentDidMount = () => {
+    setInterval(() => this.timer(), 1000)
+  }
+
+  timer() {
+    // console.log(this.state.reloadTimer)
+    if (this.state.reloadTimer > 0) {
+      this.setState({
+        reloadTimer: this.state.reloadTimer - 1
+      })
+    } else {
+      this.setState({
+        reloadTimer: 5
+      })
+
+      if (this.state.loading)
+        this.fetchTaskInfo();
+    }
   }
 
   onChangeDatasetName = ({ target: { value } }) => {
@@ -100,7 +133,55 @@ class DatasetCreate extends Component {
     })
   };
 
+  fetchTaskInfo = () => {
+    // console.log("fetchEInfo")
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    fetch(`/api/datasets/retrieve_create_data_task_info/?task_id=${this.state.task_id}`, requestOptions)
+      .then(response => response.text())
+      .then(result => this.addStatus(result))
+      .catch(error => console.log('error', error));
+  }
+
+  addStatus = (result) => {
+    let status = JSON.parse(result).status;
+    let message = JSON.parse(result).message;
+
+    // console.log(message);
+    if (status === 'SUCCESS' || status === 'PENDING' || status === 'RUNNING') {
+
+      let task_log = '';
+      if (message.task_log !== '') {
+        let idx = 1;
+        message.task_log.forEach((element, _) => {
+          task_log = <span>{task_log}Step {idx}: {element}<br></br></span>;
+          idx += 1;
+        })
+      }
+
+      this.setState({
+        task_log: task_log,
+        task_percentage: message.task_percentage.toFixed(1),
+      })
+    } else {
+      this.setState({
+        task_log: 'Initializing',
+        task_percentage: 0,
+      })
+    }
+  }
+
   fetchToCreate = () => {
+
+    var localstorage_id = localStorage.getItem('G2PDeep');
+    var timestamp = new Date().toISOString();
+    var task_id = localstorage_id + timestamp;
+    this.setState({
+      task_id: task_id,
+    })
+
     let myHeaders = new Headers();
     myHeaders.append("Access-Control-Allow-Origin", "*");
     myHeaders.append("Content-Type", "application/json");
@@ -111,7 +192,8 @@ class DatasetCreate extends Component {
       "training_dataset_url": this.state.dataTrainUrl,
       "training_dataset_server_path": _SERVER_UPLOAD_FILE_NAME,
       "description": this.state.description,
-      "test_dataset_url": ''
+      "test_dataset_url": '',
+      "task_id": task_id,
     });
     var requestOptions = {
       method: 'POST',
@@ -123,8 +205,8 @@ class DatasetCreate extends Component {
     var promise = Promise.race([
       fetch('/api/datasets/create_training_dataset/', requestOptions),
       new Promise((resolve, reject) =>
-        // 2*60*1000 second => 10 mins.
-        setTimeout(() => reject(new Error('Timeout')), 2 * 60 * 1000)
+        // 20*60*1000 second => 20 mins.
+        setTimeout(() => reject(new Error('Timeout')), 20 * 60 * 1000)
       )
     ])
       .then(response => response.text())
@@ -140,7 +222,7 @@ class DatasetCreate extends Component {
   }
 
   checkCreate = (result) => {
-    console.log(result)
+    // console.log(result)
     let status = JSON.parse(result).status;
     if (status === 'SUCCESS') {
       this.props.fetchDatasetInfo();
@@ -160,11 +242,13 @@ class DatasetCreate extends Component {
     if (error.toString() == "Error: Timeout") {
       this.setState({
         error_feedback_msg: 'The dataset is still creating. It will be shown in summary page once it is done.',
+        loading: false,
       })
     }
     else {
       this.setState({
         error_feedback_msg: 'Internal error. Please contact administrator.',
+        loading: false,
       })
     }
 
@@ -399,6 +483,22 @@ class DatasetCreate extends Component {
       );
     }
 
+    let task_status_div = (<div></div>);
+    if (this.state.loading == true) {
+      task_status_div = (
+        <div id="task_status">
+          <Divider />
+          <label className={Style.title}>Creating the dataset :</label>
+          <p>Tips: Hovering the mouse over progress bar to show details</p>
+          <div style={{ width: '50%', paddingTop: '20px' }}>
+            <Tooltip title={this.state.task_log} color='blue'>
+              <Progress percent={this.state.task_percentage} status="active" />
+            </Tooltip>
+          </div>
+        </div>
+      );
+    }
+
     let video = (
       <div style={{ width: "100%" }}>
         <YouTube videoId="CXWwzV2hPSw"
@@ -439,9 +539,10 @@ class DatasetCreate extends Component {
             <Button type="primary" size={'large'}
               onClick={this.create}
               loading={this.state.loading}
+              href="#task_status"
             >Create</Button>
-
           </div>
+          {task_status_div}
           {drawer_data_format}
         </div>
       </div>
