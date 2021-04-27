@@ -18,6 +18,8 @@ class Expriments extends Component {
             chartOfVsData:[],
             chartOfCurveData:[],
             compareChartOfdata:[],
+            showDetail:false,
+            showCompare:false,
             compareInfo:[],
             loading:false,
             loadDetailStatus:false,
@@ -83,6 +85,20 @@ class Expriments extends Component {
         })
     }
 
+    fn_showCompare = () => {
+        this.setState({
+            showCompare:true,
+            showDetail:false,
+        })
+    }
+
+    fn_showDetail = () => {
+        this.setState({
+            showCompare:false,
+            showDetail:true,
+        })
+    }
+
     getExperimentInfo = (result) => {
         let info = JSON.parse(result).message;
         // console.log(info)
@@ -117,6 +133,7 @@ class Expriments extends Component {
 
     compare = async(list) => {
         let compareJson = await this.fetchExperimentDetail_compare(list);
+        
         let compareInfo = JSON.parse(compareJson).message;
         let learning_curve_series_data = [];
         compareInfo.forEach(element => {
@@ -147,6 +164,8 @@ class Expriments extends Component {
                   this.props.history.location.pathname === '/experiment/compare') ? 'block':'none'}}
                   >
                     <Summary 
+                      fn_showDetail = {this.fn_showDetail}
+                      fn_showCompare = {this.fn_showCompare}
                       loading = {this.state.loading}
                       experimentInfo = {this.state.experimentInfo}
                       showDetails = {this.showDetails}
@@ -154,6 +173,7 @@ class Expriments extends Component {
                       fetchExperimentInfo = {this.fetchExperimentInfo}
                       history = {this.props.history} />
                 </div>
+                <a id="test11"></a>
                 <div id = 'exCreateDataset'
                   style = {{display: this.props.history.location.pathname === '/experiment/create' ? 'block':'none'}}
                   >
@@ -161,7 +181,7 @@ class Expriments extends Component {
                         fetchExperimentInfo={this.fetchExperimentInfo} />
                 </div>
                 <div id = 'exDetails'
-                  style = {{display: this.props.history.location.pathname === '/experiment/detail' ? 'block':'none'}}
+                  style = {{display: this.state.showDetail ? 'block':'none'}}
                   >
                     <Detail showIndex = {this.state.showDetails_index}
                       showDetails_id = {this.state.showDetails_id} 
@@ -170,10 +190,11 @@ class Expriments extends Component {
                       chartOfVsData = {this.state.chartOfVsData}
                       chartOfCurveData = {this.state.chartOfCurveData}
                       loadDetailStatus = {this.state.loadDetailStatus}
+                      
                       />
                 </div>
                 <div id = 'exCompare'
-                  style = {{display: this.props.history.location.pathname === '/experiment/compare' ? 'block':'none'}}
+                  style = {{display: this.state.showCompare ? 'block':'none'}}
                   >
                     <Compare 
                       compareInfo = {this.state.compareInfo} 

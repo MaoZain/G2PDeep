@@ -30,15 +30,14 @@ class App extends React.PureComponent {
   componentDidMount = () => {
     if(!localStorage.getItem('G2PDeep')){
       this.setUserId();
-    }
-    else{
+    }else{
       console.log(localStorage.getItem('G2PDeep')); 
     }
     // this.setUserId();
   }
 
   render(){
-    // console.log(this.props.match)
+    console.log(!localStorage.getItem('G2PDeep'))
     return (
       <Layout className={Style.container}>
         <Header></Header>

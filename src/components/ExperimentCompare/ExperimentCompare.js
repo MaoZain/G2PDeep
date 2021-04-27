@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Table, Tag, Space, Empty, Divider } from 'antd';
+import { Table, Tag, Space, Empty, Divider,Spin } from 'antd';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Style from './experimentCompare.module.css'
 import Highcharts from 'highcharts'
@@ -175,8 +175,9 @@ class ExperimentCompare extends Component {
           }
         }
         let compareTable = (
-            <div id ='empty' style = {{paddingTop:'50px', width: '50%'}}>
-                <Empty description="Please select at least two projects above to compare projects."></Empty>
+            <div id ='empty' style = {{paddingTop:'10px', width: '50%'}}>
+                {/* <Empty description="Please select at least two projects above to compare projects."></Empty> */}
+                <Spin></Spin>
             </div>
         )
         if(this.state.compareInfo.length > 0){

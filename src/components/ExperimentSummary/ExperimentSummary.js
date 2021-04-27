@@ -128,7 +128,7 @@ export default class ExperimentSummary extends Component {
         });
     }
 
-    compare = () => {
+    compare = () => {  
         //ajax request after empty completing
         
         if (this.state.selectedRowKeys.length < 2) {
@@ -139,7 +139,12 @@ export default class ExperimentSummary extends Component {
                 selectedRowKeys: [],
                 loading: true,
             });
+            let anchorElement = document.getElementById("test11");
+            if (anchorElement) {
+                anchorElement.scrollIntoView()
+            }
             this.props.compare(this.state.selectedRowKeys)
+            this.props.fn_showCompare()
         }
         // console.log(this.state.selectedRowKeys)
     };
@@ -183,7 +188,13 @@ export default class ExperimentSummary extends Component {
 
     showDetails = (index, id) => {
         // console.log(index,id)
+        let anchorElement = document.getElementById("test11");
+        if (anchorElement) {
+            anchorElement.scrollIntoView()
+        }
         this.props.showDetails(index, id);
+        const element  = document.getElementById('test').offsetHeight
+        this.props.fn_showDetail()
     }
 
     render() {
@@ -261,6 +272,7 @@ export default class ExperimentSummary extends Component {
                 <div id='experiment_summary_content' style={{ width: '850px' }}>
                     <div style={{ marginBottom: 16 }}>
                         <Button type="primary" onClick={this.compare} loading={loading}>
+                           
                             Compare (up to 4)
                         </Button>
                         <Button type="primary" onClick={this.reloadThrotle} style={{ background:'1890ff', marginLeft:'10px' }}>
@@ -272,6 +284,7 @@ export default class ExperimentSummary extends Component {
                     </div>
                     <Table rowSelection={rowSelection} columns={this.tableColumns} dataSource={data_table} bordered />
                 </div>
+                <div id="test" ></div>
             </div>
 
         )
