@@ -386,7 +386,7 @@ class ExperimentCreate extends Component {
                 <Select
                     className={Style.dataType}
                     showSearch
-                    placeholder="Select a Model"
+                    placeholder="Select a dataset"
                     optionFilterProp="children"
                     onChange={this.onchageDataset}
                     filterOption={(input, option) =>
@@ -436,12 +436,12 @@ class ExperimentCreate extends Component {
         )
         let learningRate = (
             <div style={{ paddingTop: '30px' }}>
-                <label className={Style.title}>Learning Rate<span style={{ color: 'red' }}>*</span> :</label>
+                <label className={Style.title}>Learning rate<span style={{ color: 'red' }}>*</span> :</label>
                 <br></br>
                 <Select
                     className={Style.dataType}
                     showSearch
-                    placeholder="0.00001"
+                    defaultValue="0.00001"
                     optionFilterProp="children"
                     onChange={this.onchageLearningRate}
                 >
@@ -457,6 +457,22 @@ class ExperimentCreate extends Component {
                     <Option value={3}>3</Option>
                     <Option value={10}>10</Option>
 
+                </Select>
+            </div>
+        )
+        let early_stopping_patience = (
+            <div style={{ paddingTop: '30px' }}>
+                <label className={Style.title}>Early stopping patience<span style={{ color: 'red' }}>*</span> :</label>
+                <br></br>
+                <Select
+                    className={Style.dataType}
+                    showSearch
+                    defaultValue="20"
+                    optionFilterProp="children"
+                >
+                    <Option value={10}>10</Option>
+                    <Option value={20}>20</Option>
+                    <Option value={30}>30</Option>
                 </Select>
             </div>
         )
@@ -657,6 +673,8 @@ class ExperimentCreate extends Component {
                     {dataset}
                     <br></br>
                     {learningRate}
+                    <br></br>
+                    {early_stopping_patience}
                     <br></br>
                     {Description}
                     <br></br>
