@@ -381,7 +381,9 @@ export default class InputData extends Component {
                     {
                         this.state.experimentInfo.map(element => {
                             // console.log(element)
-                            return <Option value={element.experiment_info_id}>{element.experiment_name}</Option>
+                            if (element.experiment_status == "SUCCESS") {
+                                return <Option value={element.experiment_info_id}>{element.experiment_name}</Option>
+                            }
                         })
                     }
                 </Select>
