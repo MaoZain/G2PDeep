@@ -5,6 +5,7 @@ import Detail from '../../components/ExperimentDetail/ExperimentDetail'
 import Compare from '../../components/ExperimentCompare/ExperimentCompare'
 import { withRouter } from 'react-router-dom'
 import {message} from 'antd'
+import { BackTop } from 'antd';
 
 class Expriments extends Component {
     constructor(props){
@@ -141,7 +142,9 @@ class Expriments extends Component {
         return (
             <div id = 'experiment'>
                 <div id = 'exSummary'
-                  style = {{display: this.props.history.location.pathname === '/experiment/summary' ? 'block':'none'}}
+                  style = {{display: (this.props.history.location.pathname === '/experiment/summary' ||
+                  this.props.history.location.pathname === '/experiment/detail' || 
+                  this.props.history.location.pathname === '/experiment/compare') ? 'block':'none'}}
                   >
                     <Summary 
                       loading = {this.state.loading}
@@ -177,6 +180,7 @@ class Expriments extends Component {
                       compareChartOfdata = {this.state.compareChartOfdata}
                       loading = {this.state.loading} />
                 </div>
+                <BackTop />
             </div>
         )
     }

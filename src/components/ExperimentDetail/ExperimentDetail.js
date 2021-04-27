@@ -176,8 +176,8 @@ export default class ExperimentDetail extends Component {
     // console.log(this.state.loadDetailStatus)
 
     let detailsDes = (
-      <div id='empty' style={{ paddingTop: '50px' }}>
-        <Empty />
+      <div id='empty' style={{ paddingTop: '50px', width: '50%'}}>
+        <Empty description="Please select a project above to show details."></Empty>
       </div>
     )
 
@@ -319,6 +319,7 @@ export default class ExperimentDetail extends Component {
     }
     return (
       <div>
+        <Divider></Divider>
         <Title level={2}>Project details</Title>
         <div style={{ paddingTop: '40px' }}>
           {detailsDes}

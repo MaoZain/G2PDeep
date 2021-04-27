@@ -54,8 +54,8 @@ export default class Navigator extends Component {
                 </SubMenu>
                 <SubMenu key="experiment" icon={<FundOutlined />} title="Projects">
                     <Menu.Item key="experimentsSummary"><NavLink to="/experiment/summary" activeStyle = {selectedStyle}>Summary</NavLink></Menu.Item>
-                    <Menu.Item key="experimentsDetail"><NavLink to="/experiment/detail" activeStyle = {selectedStyle}>Details</NavLink></Menu.Item>
-                    <Menu.Item key="compareExperiment"><NavLink to="/experiment/compare" activeStyle = {selectedStyle}>Compare</NavLink></Menu.Item>
+                    {/* <Menu.Item key="experimentsDetail"><NavLink to="/experiment/detail" activeStyle = {selectedStyle}>Details</NavLink></Menu.Item>
+                    <Menu.Item key="compareExperiment"><NavLink to="/experiment/compare" activeStyle = {selectedStyle}>Compare</NavLink></Menu.Item> */}
                     <Menu.Item key="createExperiment"><NavLink to="/experiment/create" activeStyle = {selectedStyle}>Create</NavLink></Menu.Item>
                 </SubMenu>
                 <Menu.Item key="prediction" icon={<LaptopOutlined />}><NavLink to="/prediction" activeStyle = {selectedStyle}>Predition & discovery</NavLink></Menu.Item>
